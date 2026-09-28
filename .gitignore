@@ -1,0 +1,7 @@
+build*/
+vcpkg_installed/
+.vs/
+*.user
+*.suo
+*.log
+CHECKPOINT-NOTE.txt

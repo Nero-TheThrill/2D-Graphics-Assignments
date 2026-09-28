@@ -1,0 +1,9 @@
+{
+  "name": "cumulative-2d-course",
+  "version-string": "2.0.0",
+  "dependencies": [
+    "glfw3",
+    "glew"
+  ],
+  "builtin-baseline": "3426db05b996481ca31e95fff3734cf23e0f51bc"
+}
