@@ -1,0 +1,654 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+Matrix Conventions
+Parminder Singh
+
+--- PAGE 2 ---
+OpenGL Mathematics Library- GLM 
+• Header Only
+• It is a C++ mathematics library specifically designed for graphics software based on the
+OpenGL Shading Language (GLSL) specifications.
+• GLM provides classes and functions to handle common mathematical tasks in graphics
+programming, such as vector and matrix operations, transformations, and more.
+• Key Features of GLM
+• Vector and Matrix Types: Types for 2D, 3D, and 4D vectors and matrices
+• (e.g., vec2, vec3, vec4, mat2, mat3, mat4, quaternion).
+• Transformation Functions:
+• Functions for translation, rotation, scaling, and perspective transformations that are directly aligned with
+OpenGL's way of handling transformations.
+• Compatibility with GLSL:
+• GLM is designed to mimic GLSL in terms of functionality and syntax, making it easier for developers to use in
+conjunction with OpenGL shaders.
+• Header-only Library:
+• Being a header-only library means that it does not require separate compilation or linking, simplifying its
+integration into projects.
+•5/23/2024 •2
+
+--- PAGE 3 ---
+Introduction to Matrices
+• What is a Matrix?
+• A matrix is a rectangular array of numbers arranged in rows and
+columns.
+• In computer graphics, matrices are used for various
+transformations such as translation, rotation, and scaling.
+• Importance in Computer Graphics
+• Matrices allow us to perform complex transformations on objects
+in a simple and efficient manner.
+• They help in converting coordinates from one space to another
+(e.g., from local space to world space, then to camera space, and
+finally to screen space).
+•5/23/2024 •3
+
+--- PAGE 4 ---
+Matrix Initialization
+• Identity Matrix
+• An identity matrix is a matrix that doesn't change any vector
+when we multiply that vector by this matrix.
+•5/23/2024 •4
+•glm::mat4 identity = glm::mat4(1.0f);
+
+--- PAGE 5 ---
+Matrix Initialization
+• Custom Matrix Initialization
+• Initialize a matrix with specific values to represent a
+transformation.
+•5/23/2024 •5
+• glm::mat4 customMatrix = glm::mat4(
+• 1.0f, 0.0f, 0.0f, 0.0f,
+• 0.0f, 1.0f, 0.0f, 0.0f,
+• 0.0f, 0.0f, 1.0f, 0.0f,
+• 0.0f, 0.0f, 0.0f, 1.0f
+• );
+
+--- PAGE 6 ---
+Printing the Matrix
+• Print matrix elements
+•5/23/2024 •6
+•void print_matrix(const glm::mat4& matrix) {
+• // Print the matrix to verify
+• std::cout << "[MATRIX OUTPUT]" << std::endl;
+• for (int i = 0; i < 4; ++i) {
+• for (int j = 0; j < 4; ++j) {
+• std::cout<< std::setw(10) << std::fixed
+•<< std::setprecision(4) << matrix[i][j] << " ";
+• }
+• std::cout << std::endl;
+• }
+• std::cout << "\n\n\n";
+•}
+
+--- PAGE 7 ---
+Printing the Matrix
+• Example
+•5/23/2024 •7
+• float elements[16] = {
+• 1.0f, 2.0f, 3.0f, 4.0f, // Column 1
+• 5.0f, 6.0f, 7.0f, 8.0f, // Column 2
+• 9.0f, 10.0f, 11.0f, 12.0f, // Column 3
+• 13.0f, 14.0f, 15.0f, 16.0f // Column 4
+• };
+• float x, y, z;
+• glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+• // Initialize the matrix with the specified elements
+• glm::mat4 matrix = glm::make_mat4(elements);
+• print_matrix(matrix);
+
+--- PAGE 8 ---
+API for Transformations
+•
+ Scaling
+•
+ Translation
+•
+ Rotation
+•5/23/2024 •8
+
+--- PAGE 9 ---
+Translation
+• Move objects in 3D space.
+•5/23/2024 •9
+• glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+Ƹ
+𝑖
+Ƹ
+𝑗
+Ԧ
+𝑡
+ 𝑂
+ +
+ Ԧ
+𝑡
+T
+Ԧ
+𝑡
+
+--- PAGE 10 ---
+Scale
+• Scale objects in 3D space.
+•5/23/2024 •10
+•glm::mat4 scalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(x, y, z));
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+x
+ Ƹ
+𝑖
+𝑦
+ Ƹ
+𝑗
+H
+ 𝑥
+,
+𝑦
+
+--- PAGE 11 ---
+Rotate
+• Rotate objects around an axis.
+•5/23/2024 •11
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+R
+𝜃
+°
+glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(x, y, z));
+
+--- PAGE 12 ---
+Equivalent in GLSL(OpenGL Shading Language)
+•5/23/2024 •12
+• #version 450 core
+• layout (location=8) in vec2 aVertexPosition;
+• layout (location=9) in vec3 aVertexColor;
+• layout (location=0) out vec3 vColor;
+• uniform mat4 transform_mat;
+• void main() {
+• gl_Position = transform_mat * vec4(aVertexPosition, 0.0, 1.0);
+• vColor = aVertexColor;
+• }
+
+--- PAGE 13 ---
+Step
+-
+by
+-
+step coding
+•
+ Initialize
+ a
+ Matrix
+ and
+ Apply
+ Transformations
+•
+ Create
+ identity,
+ translation,
+ rotation,
+ and
+ scaling
+ matrices
+.
+•
+ Combine
+ these
+ matrices
+ to
+ create
+ a
+ single
+ matrix
+.
+•
+ Pass
+ Matrices
+ to
+ Shaders
+•
+ Use
+ glUniformMatrix
+4
+fv
+ to
+ pass
+ matrices
+ from
+ your
+ application
+ to
+ the
+vertex
+ shader
+.
+•
+ Render
+ a
+ Simple
+ Object
+•
+ Render
+ a
+ simple
+ object
+ like
+ a
+ color
+ quad
+ in
+ tutorial
+-
+1
+ and
+ apply
+transformations
+ to
+ it
+.
+•5/23/2024 •13
+
+--- PAGE 14 ---
+Uniform Variables in GLSL
+• Uniform variables are global variables in shader programs that remain
+constant for all vertices (in the vertex shader) or all fragments (in the
+fragment shader) processed during a single rendering call.
+• Used to pass data from the CPU application to the GPU shaders.
+• Characteristics
+• Global Scope:
+• Uniforms are read-only variables that can be accessed by any shader stage (vertex,
+fragment, etc.).
+• Constant per Draw Call:
+• Their value is constant for the duration of a draw call but can be changed between
+draw calls.
+• Usage:
+• Commonly used for transformation matrices, lighting parameters, textures, and any
+other data that is uniform (constant) across all vertices or fragments.
+•5/23/2024 •14
+
+--- PAGE 15 ---
+Differences Uniforms and Attributes
+•
+ Scope
+ and
+ Lifetime
+•
+ Uniforms
+:
+ Global
+ variables
+ constant
+ for
+ a
+ single
+ draw
+ call
+;
+ can
+ be
+ used
+ in
+ both
+ vertex
+ and
+fragment
+ shaders
+ (and
+ other
+ shader
+ stages)
+.
+•
+ Attributes
+:
+ Per
+-
+vertex
+ variables
+ only
+ available
+ in
+ the
+ vertex
+ shader
+.
+•
+ Usage
+•
+ Uniforms
+:
+ Used
+ for
+ data
+ that
+ remains
+ the
+ same
+ across
+ all
+ vertices
+ and
+ fragments
+ within
+ a
+draw
+ call,
+ such
+ as
+ transformation
+ matrices,
+ lighting
+ parameters,
+ and
+ texture
+ samplers
+.
+•
+ Attributes
+:
+ Used
+ for
+ data
+ that
+ varies
+ from
+ vertex
+ to
+ vertex,
+ such
+ as
+ vertex
+ positions,
+normals
+,
+ texture
+ coordinates,
+ and
+ colors
+.
+•
+ Setting
+ Values
+•
+ Uniforms
+:
+ Set
+ using
+ glUniform
+*
+ functions,
+ which
+ update
+ the
+ value
+ for
+ the
+ current
+ program
+.
+•
+ Attributes
+:
+ Set
+ using
+ glEnableVertexArrayAttrib
+ and
+ related
+ functions,
+ which
+ define
+ how
+vertex
+ buffer
+ data
+ is
+ interpreted
+.
+•5/23/2024 •15
+
+--- PAGE 16 ---
+Applications
+• Uniforms:
+• Transformation matrices (model, view, projection)
+• Lighting information (light positions, colors, and parameters)
+• Material properties (ambient, diffuse, specular colors)
+• Texture samplers and parameters
+• Attributes:
+• Vertex positions
+• Vertex normals
+• Texture coordinates
+• Vertex colors
+• Tangent and bitangent vectors for normal mapping
+•5/23/2024 •16
+
+--- PAGE 17 ---
+Orthographic projection APIs
+• glOrtho is widely used in various applications due to its ability
+to create an orthographic (parallel) projection
+• Objects maintain their size regardless of depth
+•
+ ortho
+(float
+ left,
+ float
+ right,
+ float
+ bottom,
+ float
+ top,
+ float
+ near,
+ float
+ far)
+;
+•5/23/2024 •17
+
+--- PAGE 18 ---
+Prefix and Postfix Notation in Matrix 
+Multiplication
+• The terms "prefix" and "postfix" generally refer to the order in
+which transformations (like translation, rotation, scaling) are
+applied to objects.
+• This is particularly relevant in matrix multiplication, where the
+order of multiplication affects the result due to the non-
+commutative nature of matrix operations.
+•5/23/2024 •18
+
+--- PAGE 19 ---
+Prefix Notation
+• Prefix Notation (also known as Pre-Multiplication):
+• Transformations are applied from right to left. This means
+that the transformation matrix closest to the object being
+transformed is applied first.
+• For example, if you have matrices 𝑀1, M2, and M3, and you
+multiply them as 𝑀=𝑀3×𝑀2×𝑀1, the transformation
+represented by 𝑀1 is applied first, followed by 𝑀2, and finally
+𝑀3.
+•5/23/2024 •19
+
+--- PAGE 20 ---
+Practical Example
+• Consider the case where we want to apply a series of transformations to a vertex
+in a 3D space. Let’s assume we have a vertex 𝑣 and we want to apply a scaling,
+followed by a rotation, and finally a translation.
+• Prefix Notation Example:
+• In prefix notation, the transformations are specified in the order they are applied,
+so if we want to:
+• Scale by matrix S
+• Rotate by matrix R
+• Translate by matrix T
+• The final transformation matrix would be:
+• 𝑀=𝑇×𝑅×𝑆
+• To transform a vertex 𝑣v, you would compute:
+• 𝑣′=𝑀×𝑣=𝑇×𝑅×𝑆×𝑣
+• This means that the vertex 𝑣 is first scaled, then rotated, and finally translated.
+•5/23/2024 •20
+
+--- PAGE 21 ---
+Practical Example
+•5/23/2024 •21
+
+
+--- PAGE 22 ---
+Matrix Conventions
+• Column-Major vs. Row-Major
+• Column-Major Order:
+• OpenGL uses column-major order, meaning the matrix elements
+are stored column by column.
+• Row-Major Order:
+• Some other graphics APIs like DirectX use row-major order, where
+the matrix elements are stored row by row.
+•5/23/2024 •22
+
+--- PAGE 23 ---
+Row-Major vs. Column-Major Layouts
+• Row-Major Order:
+• In row-major order, the matrix is stored in memory row by row.
+• For a 4x4 matrix, the elements are stored in the following order:
+• m[0], m[1], m[2], m[3],
+• m[4], m[5], m[6], m[7],
+• m[8], m[9], m[10], m[11],
+• m[12], m[13], m[14], m[15]
+• Column-Major Order:
+• In column-major order, the matrix is stored in memory column by column.
+• For a 4x4 matrix, the elements are stored in the following order:
+• m[0], m[4], m[8], m[12],
+• m[1], m[5], m[9], m[13],
+• m[2], m[6], m[10], m[14],
+• m[3], m[7], m[11], m[15]
+•5/23/2024 •23
+
+--- PAGE 24 ---
+Column-Major Layouts
+• OpenGL uses column-major order for matrices by
+default.
+• This means that when you pass a matrix to a shader, it
+expects the matrix to be in column-major order.
+• OpenGL and GLSL expect matrices in column-major
+order by default.
+• GLM also uses column-major order by default to align
+with OpenGL.
+• When initializing matrices in GLM, you can directly pass
+them to OpenGL shaders without any reordering.
+•5/23/2024 •24
+
+--- PAGE 25 ---
+Scalar 
+in GLSL
+• In GLSL (OpenGL Shading Language), scalar types are the basic building blocks for
+more complex data types like vectors and matrices. Scalars represent single values and
+come in various types:
+• Floating-Point Types
+• float: Represents a single-precision floating-point number.
+• double: Represents a double-precision floating-point number (available in GLSL 4.00 and
+higher).
+• Integer Types
+• int: Represents a signed 32-bit integer.
+• uint: Represents an unsigned 32-bit integer.
+• short: Represents a signed 16-bit integer (available in GLSL 4.10 and higher).
+• ushort: Represents an unsigned 16-bit integer (available in GLSL 4.10 and higher).
+• int64_t: Represents a signed 64-bit integer (available in GLSL 4.60 and higher).
+• uint64_t: Represents an unsigned 64-bit integer (available in GLSL 4.60 and higher).
+• Boolean Type
+• bool: Represents a boolean value (true or false).
+•5/23/2024 •25
+
+--- PAGE 26 ---
+Vectors 
+in GLSL
+• Vectors: In GLSL (OpenGL Shading Language), vectors and matrices are fundamental
+data types used for various calculations in shaders. These types are essential for
+handling positions, colors, normals, texture coordinates, transformations, and more.
+Here's a detailed overview of how vectors and matrices are represented and used in
+GLSL. It provides several built-in vector types:
+• vec2: A 2-component floating-point vector.
+• vec3: A 3-component floating-point vector.
+• vec4: A 4-component floating-point vector.
+• ivec2: A 2-component integer vector.
+• ivec3: A 3-component integer vector.
+• ivec4: A 4-component integer vector.
+• uvec2: A 2-component unsigned integer vector.
+• uvec3: A 3-component unsigned integer vector.
+• uvec4: A 4-component unsigned integer vector.
+• bvec2: A 2-component boolean vector.
+• bvec3: A 3-component boolean vector.
+• bvec4: A 4-component boolean vector.
+•5/23/2024 •26
+
+--- PAGE 27 ---
+Matrices in GLSL
+• Matrices: GLSL also includes matrix types, which are
+used primarily for transformations:
+• mat2:
+• A 2x2 floating-point matrix.
+• mat3:
+• A 3x3 floating-point matrix.
+• mat4:
+• A 4x4 floating-point matrix.
+•5/23/2024 •27
+
+--- PAGE 28 ---
+Vector and Matrix Operations
+• GLSL supports various operations on vectors and matrices,
+including:
+• Addition and Subtraction:
+• glm::vec3 a = glm::vec3(1.0) + glm::vec3(2.0);
+• Multiplication:
+• glm::mat4 m = glm::mat4(1.0) * glm::mat4(2.0);
+• Division:
+• vec4 d = vec4(1.0) / 2.0;
+ //
+ assuming
+ glm
+ namespace
+ is
+ added
+• Component-wise Operations:
+• vec3 c = a * b; // where a and b are vec3
+• Dot Product:
+• float d = dot(glm::vec3(1.0), glm::vec3(2.0));
+• Cross Product:
+• glm::vec3 c = glm::cross(glm::vec3(1.0), glm::vec3(2.0));
+•5/23/2024 •28
+
+--- PAGE 29 ---
+Swizzling
+•5/23/2024 •29
+glm::vec4 v = glm::vec4(1.0, 2.0, 3.0, 4.0);
+glm::vec2 xy = v.xy; // Creates a vec2 from the x and y components
+glm::vec3 yxz = v.yxz; // Creates a vec3 by reordering components
+glm::vec4 rgba = v.rgba; // Equivalent to xyzw, useful for colors
+glm::vec4 mix = v.xxzz; // Creates a vec4 with repeated components
+
+--- PAGE 30 ---
+Scaler, Vectors and Matrices in GLSL
+•5/23/2024 •30
+• float cameraPosition, cameraTarget, upVector, radians(45.0); // Assume more variables
+•glm::mat4 modelMatrix = glm::mat4(1.0); // Identity matrix
+•glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraTarget, upVector);
+•glm::mat4 projectionMatrix = glm::perspective(radians(45.0), aspectRatio, nearPlane, farPlane);
+•glm::mat4 mvpMatrix = projectionMatrix * viewMatrix * modelMatrix; // Combined transformation
+•glm::vec4 transformedPosition = mvpMatrix * vec4(position, 1.0); // Transforming a position
+
+--- PAGE 31 ---
+Swizzling
+•5/23/2024 •31
+glm::vec4 v = glm::vec4(1.0, 2.0, 3.0, 4.0);
+glm::vec2 xy = v.xy; // Creates a vec2 from the x and y components
+glm::vec3 yxz = v.yxz; // Creates a vec3 by reordering components
+glm::vec4 rgba = v.rgba; // Equivalent to xyzw, useful for colors
+glm::vec4 mix = v.xxzz; // Creates a vec4 with repeated components
+
+--- PAGE 32 ---
+Thanks
+•5/23/2024 •32

@@ -1,0 +1,922 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+Introduction to Rendering Pipeline
+Prasanna Ghali
+
+--- PAGE 2 ---
+•
+ Computation
+ of
+ 2
+D
+ images
+ from
+ 3
+D
+ scene
+ at
+ rate
+ at
+which
+ user
+ can
+ comfortably
+ interact
+ with
+ scene
+•
+ Interactivity
+ rate
+:
+ ≥
+ 30
+ fps
+2
+Real
+-
+Time Rendering
+3D Scene composed 
+of triangles 2D Image
+Renderer
+5/3/2024
+Every frame, real-time renderer Consumes triangles to Produce
+corresponding pixels that will collectively form an image in color buffer
+
+--- PAGE 3 ---
+3
+Hardware Implementation of Renderer
+•
+ Of
+ several
+ techniques
+ available
+ to
+ create
+ image
+ from
+ 3
+D
+scene
+ [tessellated
+ into
+ triangles],
+ pipeline
+ architecture
+ is
+ideal
+ to
+ implement
+ real
+-
+time
+ renderer
+ in
+ hardware
+•
+ What
+ is
+ a
+ pipeline
+ or
+ what
+ is
+ pipelining
+?
+5/3/2024
+3D Scene composed 
+of triangles 2D Image
+Renderer
+Every frame, real-time renderer Consumes triangles to Produce
+corresponding pixels that will collectively form an image in color buffer
+
+--- PAGE 4 ---
+4
+What is 
+a Pipeline
+?
+•
+ Pipelining
+ is
+ optimization
+ technique
+ to
+ achieve
+ temporal
+parallelism
+•
+ Concept
+ similar
+ to
+ assembly
+ line
+ where
+ multiple
+ widgets
+ are
+ worked
+ on
+simultaneously
+ to
+ speed
+ up
+ manufacturing
+ of
+ individual
+ widgets
+•
+ Subdivide
+ task
+ into
+ sequence
+ of
+ discrete
+ subtasks
+•
+ S
+ubtask
+ is
+ executed
+ by
+ specialized
+ hardware
+ stage
+•
+ Stages
+ operate
+ concurrently
+ to
+ overlap
+ execution
+ of
+ successive
+ tasks
+•
+ Assumptions
+•
+ E
+very
+ stage,
+ by
+ design,
+ takes
+ same
+ amount
+ of
+ time
+ to
+ complete
+ its
+ subtask
+•
+ Pipe
+ is
+ linear,
+ i
+.
+e
+.
+,
+ stage
+ S
+j
+ in
+ pipe
+ with
+ stages
+ {
+S
+1
+ ,
+ S
+2
+ ,
+ …
+,
+ S
+k
+}
+ cannot
+ start
+ until
+all
+ earlier
+ stages
+ {
+S
+i
+ 
+ i
+ 
+ j
+}
+ finish
+5/3/2024
+
+--- PAGE 5 ---
+5
+Pipeline Example: Car Manufacturing
+•
+ Consider
+ car
+ manufacturing
+ process
+ consisting
+ of
+ five
+distinct
+ and
+ independent
+ stages
+ [or
+ steps]
+:
+1.
+ Build chassis [or frame]
+2.
+ Insert engine [into chassis]
+3.
+ Add dashboard, seats, doors, and hood [to frame]
+4.
+ Attach wheels
+5.
+ Paint
+•
+ Suppose
+ each
+ stage
+ of
+ car
+ manufacturing
+ process
+takes
+ 1
+ hour
+5/3/2024
+
+--- PAGE 6 ---
+6
+Sequential Car Manufacturing
+•
+ Latency
+ is
+ time
+ from
+ start
+ to
+ finish
+ to
+ manufacture
+ one
+ car
+•
+ Latency here is 
+5
+ hours
+•
+ Throughput
+ is
+ number
+ of
+ cars
+ manufactured
+ per
+ hour
+•
+ Throughput here is 
+0
+.
+2
+ cars
+•
+ How
+ will
+ pipelining
+ help?
+5/3/2024
+1 1 1 1 1 1 1 1 1 1 1 1
+1𝑎𝑚 6𝑎𝑚 4𝑝𝑚11𝑎𝑚 9𝑝𝑚
+1 1 1 11 1 1 1
+𝑻𝒊𝒎𝒆
+𝑻𝒂𝒔𝒌 𝑶𝒓𝒅𝒆𝒓
+
+--- PAGE 7 ---
+7
+Pipelined Car Manufacturing
+•
+ Latency
+ of
+ each
+ manufactured
+ car
+ is
+ still
+ 5
+ hours!!!
+•
+ However,
+ pipelined
+ manufacturing
+ of
+ 4
+ cars
+ requires
+ only
+ 8
+ hours!!!
+•
+ And,
+ throughput
+ is
+ now
+ 1
+ car
+ [because
+ new
+ car
+ manufactured
+ every
+ hour]
+5/3/2024
+1 1 1 1 1 1 1 1 1 1 1 1
+1𝑎𝑚 6𝑎𝑚 4𝑝𝑚11𝑎𝑚 9𝑝𝑚
+1 1 1 11 1 1 1
+𝑻𝒊𝒎𝒆
+𝑻𝒂𝒔𝒌 𝑶𝒓𝒅𝒆𝒓
+ 𝑆1
+ 𝑆2
+ 𝑆3
+ 𝑆4
+ 𝑆5
+𝐶1
+𝑆1
+ 𝑆2
+ 𝑆3
+ 𝑆4
+ 𝑆5
+𝐶2
+𝑆1
+ 𝑆2
+ 𝑆3
+ 𝑆4
+ 𝑆5
+𝐶3
+𝑆1
+ 𝑆2
+ 𝑆3
+ 𝑆4
+ 𝑆5
+𝐶4
+
+--- PAGE 8 ---
+•
+ Real
+-
+time
+ rendering
+ –
+ the
+ process
+ of
+ converting
+ many
+triangles
+ into
+ pixels
+ –
+ is
+ implemented
+ as
+ rendering
+pipeline
+•
+ Efficiently
+ maps
+ consumer
+-
+producer
+ model
+ of
+ renderer
+ to
+hardware
+•
+ Several
+ hardware
+ units
+ perform
+ distinct
+ operations
+concurrently
+ on
+ different
+ triangles
+ at
+ different
+ stages
+ of
+ their
+transformation
+ into
+ pixels
+8
+Rendering Pipeline
+5/3/2024
+3D Scene composed 
+of triangles
+Application
+[defining 3D scene 
+composed of objects]
+Real-time renderer
+implemented as
+rendering or 
+graphics pipeline
+2D Image
+
+--- PAGE 9 ---
+9
+Fixed Function Rendering Pipeline (1/2)
+5/3/2024
+3D Scene composed 
+of triangles
+Application
+[defining 3D scene 
+composed of objects]
+Real-time renderer
+implemented as
+rendering or 
+graphics pipeline
+2D Image
+Application Transformation Rasterization Pixels
+CPU GPU
+3D Triangles, matrices, 
+textures, and configuration
+2D Triangles
+
+--- PAGE 10 ---
+10
+Fixed Function Rendering Pipeline 
+(2/2
+)
+5/3/2024
+Application Transformation Rasterization Pixels
+CPU GPU
+3D Triangles, matrices, 
+textures, and configuration
+2D Triangles
+Application
+Vertex 
+Processing 
+Stages
+Fragment
+Processing 
+Stages
+Pixels
+CPU GPU
+
+--- PAGE 11 ---
+More Elaborate Definition of Pixel
+•
+ Set
+ of
+ data
+ that
+ is
+ about
+ to
+ be
+ written
+ to
+ output
+ buffer(s)
+:
+•
+ Viewport
+ coordinates
+ [which
+ location
+ in
+ output
+ buffer
+ does
+pixel
+ correspond
+ to?]
+•
+ Appearance
+ information
+ to
+ color
+ buffer
+ [
+RGB
+ components]
+•
+ Depth
+ value
+ to
+ depth
+ buffer
+ [for
+ hidden
+-
+surface
+ removal
+ to
+generate
+ correct
+ images
+ and
+ shadow
+ map
+ to
+ generate
+shadows]
+•
+ Appearance
+ information
+ to
+ texture
+ map
+ [e
+.
+g
+.
+,
+ used
+ in
+ racing
+game
+ to
+ create
+ image
+ from
+ rear
+-
+view
+ camera
+ which
+ can
+ then
+be
+ used
+ as
+ texture
+ map
+ to
+ be
+ applied
+ on
+ rear
+-
+view
+ mirror
+object]
+115/3/2024
+
+--- PAGE 12 ---
+What is a Fragment?
+•
+ Many
+ triangles
+ in
+ 3
+D
+ scene
+ overlap
+ or
+ occlude
+ other
+triangles
+ causing
+ some
+ rasterized
+ pixel
+ values
+ to
+ be
+discarded
+ [i
+.
+e
+.
+,
+ not
+ written
+ to
+ color
+ buffer]
+•
+ Therefore, need to distinguish between pixels that will be written 
+to color buffer and pixels that will be discarded
+•
+ We’ll
+ relabel
+ rasterized
+ pixels
+ as
+ fragments
+ [
+potential
+ pixels]
+and
+ use
+ term
+ pixel
+ to
+ mean
+ corresponding
+ fragment
+ which
+is
+ determined
+ to
+ be
+ visible
+•
+ Fragment
+ will
+ consist
+ of
+ viewport
+ coordinates
+ [where
+ on
+screen?]
+ plus
+ interpolants
+ [values
+ that’ll
+ be
+ used
+ to
+ compute
+color,
+ depth,
+ …
+]
+125/3/2024
+
+--- PAGE 13 ---
+Programmable Pipeline: More Details
+5/3/2024 13
+Framebuffer
+Attribute 
+setup,
+Geometric
+t
+ransformations
+Per
+-
+Vertex
+Assembly
+Per
+-
+Primitive
+ Rasterization
+Color
+c
+omputation
+Per
+-
+Fragment
+ Output
+Combiner
+Position coordinates: (𝑥, 𝑦, 𝑧)
+Color components: (𝑟, 𝑔, 𝑏)
+Texture coordinates:(𝑠, 𝑡)
+Per
+-
+vertex attributes
+using a triangle
+a
+s an example
+r
+equires matrices
+Primitives:
+Points
+Lines
+Triangles
+
+--- PAGE 14 ---
+Our Simplified Programmable Pipe
+5/3/2024 14
+OpenGL Commands
+GPU Commands
+& Data Stream
+3D Game
+OpenGL
+Vertex
+Puller
+Primitive
+Assembly
+Rasterization &
+Interpolation
+Per
+-
+Fragment
+Operations
+ Framebuffer
+Vertex Index
+Stream
+Assembled
+Points, Lines
+& Triangles
+Pixel Location
+Stream
+Pixel
+Updates
+Vertex 
+Processor
+Pretransformed
+Vertices
+T
+ransformed
+Vertices
+ Fragment
+Processor
+Pretransformed
+Fragments
+T
+ransformed
+Fragments
+CPU
+-
+GPU Boundary
+
+--- PAGE 15 ---
+Shader
+5/3/2024 15
+Input stream
+Fragments
+Fragment program [shader]
+Texture memory
+[Read-only]
+Output stream
+Shaded fragments
+Fragment program as a stream processor
+[Single Program Multiple Data processor]
+Shader is written to operate on a single vertex or fragment and is 
+executed for every vertex or fragment
+
+--- PAGE 16 ---
+•
+ Another
+ view
+ of
+ rendering
+ pipeline
+:
+ different
+ coordinate
+ systems
+ that
+ 3
+D
+objects
+ [and
+ their
+ primitives]
+ must
+ transition
+ thro’
+ in
+ rendering
+ pipeline
+3D Rendering Pipe: Coordinate Systems
+165/3/2024
+Model TransformationModel 
+Coordinates
+Application/World 
+Coordinates
+View Coordinates Clip Coordinates
+From Modeling
+Software View/Camera/Eye
+Transformation
+Projection Transformation
+Projection [Division]
+Viewport Transformation To Framebuffer
+𝑥
+𝑚
+,
+ 𝑦
+𝑚
+,
+ 𝑧
+𝑚
+ 𝑥
+𝑤
+,
+ 𝑦
+𝑤
+,
+ 𝑧
+𝑤
+𝑥
+𝑣
+,
+ 𝑦
+𝑣
+,
+ 𝑧
+𝑣
+ ෤
+𝑥
+,
+ ෤
+𝑦
+,
+ ǁ
+𝑧
+,
+ ෥
+𝑤
+𝑥
+𝑛
+,
+ 𝑦
+𝑛
+,
+ 𝑧
+𝑛
+ 𝑥
+𝑑
+,
+ 𝑦
+𝑑
+,
+ 𝑧
+𝑑
+Normalized Device
+Coordinates
+Screen/Device/Window/Pixel 
+Coordinates
+
+--- PAGE 17 ---
+•
+ Rendering
+ pipeline
+ for
+ 2
+D
+ applications
+:
+ different
+ coordinate
+ systems
+ that
+2
+D
+ objects
+ [and
+ their
+ primitives]
+ must
+ transition
+ thro’
+ in
+ rendering
+ pipeline
+2
+D 
+Rendering Pipe: Coordinate Systems
+175/3/2024
+Model TransformationModel 
+Coordinates
+Application/World 
+Coordinates
+View Coordinates
+From Modeling
+Software View/Camera/Eye
+Transformation
+Camera window to NDC transformation
+Viewport Transformation To Framebuffer
+𝑥
+𝑚
+,
+ 𝑦
+𝑚
+ 𝑥
+𝑤
+,
+ 𝑦
+𝑤
+𝑥
+𝑣
+,
+ 𝑦
+𝑣
+𝑥
+𝑛
+,
+ 𝑦
+𝑛
+ 𝑥
+𝑑
+,
+ 𝑦
+𝑑
+Normalized Device
+Coordinates
+Screen/Device/Window/Pixel 
+Coordinates

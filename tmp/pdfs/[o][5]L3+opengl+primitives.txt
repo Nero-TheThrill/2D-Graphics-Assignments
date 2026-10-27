@@ -1,0 +1,1270 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+OpenGL Primitives
+Prasanna Ghali
+
+--- PAGE 2 ---
+OpenGL Geometric 
+Primitives (1/2)
+•
+ GL
+ provides
+ mechanisms
+ to
+ describe
+ how
+ complex
+geometric
+ objects
+ are
+ to
+ be
+ rendered
+•
+ Doesn’t
+ provide
+ mechanisms
+ to
+ describe
+ the
+ complex
+objects
+ themselves
+•5/10/2024 •2
+
+--- PAGE 3 ---
+OpenGL Geometric 
+Primitives (2/2)
+•5/10/2024 •3
+GL_POINTS
+ GL_LINES
+GL_LINE_STRIP
+ GL_LINE_LOOP
+ GL_TRIANGLES
+ GL_TRIANGLE_STRIP
+GL_TRIANGLE_FAN
+ GL_POLYGON
+GL_QUAD_STRIP
+GL_QUADS
+
+--- PAGE 4 ---
+Why Triangle Primitives In Real
+-
+Time 
+Graphics?
+•
+ Triangles
+ provide
+ cleanest
+ possible
+ definition
+ of
+rendering
+ primitive
+•
+ Also
+ used
+ for
+ rendering
+ GL_POINT
+ and
+ GL_LINE
+ primitives
+•5/10/2024 •4
+
+--- PAGE 5 ---
+Why Triangle Primitives In Real
+-
+Time?
+•
+ Can
+ approximate
+ any
+ shape
+•
+ Meshes
+ generated
+ by
+ modeling
+ software
+ such
+ as
+ 3
+DS
+ Max
+ and
+Maya
+ can
+ be
+ converted
+ to
+ triangular
+ meshes
+•
+ Scalable
+ –
+ can
+ vary
+ number
+ and
+ density
+ of
+ triangles
+•
+ Always
+ convex
+•
+ Line
+ segment
+ between
+ two
+ edges
+ will
+ always
+ be
+ interior
+•
+ Vertices
+ are
+ always
+ coplanar
+•
+ Simplest
+ polygon
+ defining
+ plane
+ equation
+:
+ 𝐴𝑥
+ +
+ 𝐵𝑦
+ +
+ 𝐶𝑧
+ +
+ 𝐷
+ =
+ 0
+•
+ Linear
+ interpolation
+ is
+ mathematically
+ straightforward
+•
+ Barycentric
+ coordinates
+ allow
+ any
+ attribute
+ to
+ be
+ interpolated
+•5/10/2024 •5
+
+--- PAGE 6 ---
+Why Not Quads?
+•
+ Commonly
+ used
+ in
+ subdivision
+ surface
+ modeling
+algorithms
+ implemented
+ by
+ modeling
+ software
+•
+ However,
+ not
+ suitable
+ as
+ rendering
+ primitive
+•
+ C
+an
+ be
+ concave
+•
+ C
+an
+ be
+ self
+-
+intersecting
+•
+ Four
+ vertices
+ need
+ not
+ be
+ on
+ same
+ plane
+ –
+ not
+ suitable
+ for
+real
+-
+time
+ lighting
+ and
+ texturing
+•
+ Bilinear
+ interpolation
+ required
+ for
+ per
+-
+vertex
+ attributes
+ –
+ more
+expensive
+ than
+ linear
+ interpolation
+•5/10/2024 •6
+
+--- PAGE 7 ---
+Model Representations: Triangle Meshes
+•
+ Requires
+ geometry
+ data
+ [physical
+ information]
+•
+ Position
+ coordinates
+•
+ Topology
+ -
+ triangle
+ connectivity
+ information
+•
+ Requires
+ attribute
+ data
+ [appearance
+ information]
+•
+ Normals
+•
+ Texture
+ coordinates
+•
+ Surface
+ material
+ properties
+:
+ degree
+ of
+ reflectivity,
+ shininess,
+transparency,
+ …
+•
+ …
+•5/10/2024 •7
+
+--- PAGE 8 ---
+Triangle Mesh 
+Representations
+•5/10/2024 •8
+•
+ Possible
+ representations
+•
+ Explicit
+ (non
+-
+indexed)
+•
+ Indexed
+•
+ Explicit
+ (non
+-
+indexed)
+ fans
+ and
+ strips
+•
+ Indexed
+ fans
+ and
+ strips
+•
+ Tradeoffs
+ in
+ space
+ and
+ time
+•
+ Storage
+ size
+•
+ Access
+ time
+•
+ Processing
+ time
+
+--- PAGE 9 ---
+Triangle Mesh Layout in GPU Memory
+•5/10/2024 •9
+•
+ Structure
+ of
+ arrays
+ layout
+•
+ Array
+ of
+ structures
+ layout
+
+--- PAGE 10 ---
+Array of Structures Layout
+•5/10/2024 •10
+Position Color Texture
+x y z r g b s t
+Position Color Texture
+Coordinates
+x y z r g b s t
+struct Vertex { 
+  glm::vec3 pos; // position 
+  glm::vec3 nml; // normal 
+  glm::vec2 tex; // texture coordinates 
+}; 
+
+--- PAGE 11 ---
+Structure of Arrays Layout
+•5/10/2024 •11
+(x, y, z) (x, y, z)
+Position
+(r, g, b) (r, g, b) (s, t) (s, t)
+Texture
+Coordinates
+Color
+
+--- PAGE 12 ---
+AoS
+ vs 
+SoA
+•5/10/2024 •12
+•
+ AoS
+ more
+ readable
+ because
+ of
+ logical
+ grouping
+•
+ AoS
+ might
+ require
+ more
+ memory
+ because
+ of
+ padding
+compared
+ to
+ SoA
+•
+ Cache
+ locality
+•
+ AoS
+ has
+ better
+ cache
+ locality
+ when
+ dealing
+ with
+ entire
+ vertex
+data
+•
+ SoA
+ has
+ better
+ cache
+ locality
+ when
+ dealing
+ with
+ specific
+vertex
+ attribute
+ (and
+ not
+ entire
+ vertex
+ data)
+
+--- PAGE 13 ---
+Reference Mesh Model
+•5/10/2024 •13
+•
+ Reference
+ model
+ with
+ 6
+ triangles
+ and
+ 7
+ vertices
+•
+ Each
+ vertex
+ modeled
+ as
+struct Vertex { 
+  glm::vec3 pos; // position 
+  glm::vec3 nml; // normal 
+  glm::vec2 tex; // texture coordinates 
+}; 
+v
+0
+v
+1
+v
+2
+v
+3
+v
+6
+v
+4
+v
+5
+T
+0
+T
+1
+ T
+2
+T
+3
+T
+4
+T
+5
+
+--- PAGE 14 ---
+Non
+-
+Indexed (Explicit) Representation 
+(1/4
+)
+•5/10/2024 •14
+•
+ Triangle
+ represented
+ as
+ array
+ of
+ 𝑚
+ elements
+ with
+ each
+element
+ containing
+ data
+ for
+ its
+ 3
+ vertices
+struct Triangle_Explicit { 
+  Vertex p0, p1, p2; 
+}; 
+ 
+struct TriMesh_Explicit { 
+  GLint             tri_cnt; 
+  Triangle_Explicit *ptr; 
+}; 
+
+--- PAGE 15 ---
+Non
+-
+Indexed (Explicit) Representation 
+(2/4
+)
+•5/10/2024 •15
+v
+0
+v
+1
+v
+2
+v
+3
+v
+6
+v
+4
+v
+5
+T
+0
+T
+1
+ T
+2
+T
+3
+T
+4
+T
+5
+v0 v1 v2
+v1 v3 v2
+v3 v4 v2
+v4 v5 v2
+v1 v6 v3
+v3 v6 v4
+
+--- PAGE 16 ---
+Non
+-
+Indexed (Explicit) Representation 
+(3/4
+)
+•5/10/2024 •16
+•
+ Assume
+ model
+ has
+ m
+ triangles
+ and
+ n
+ vertices
+•
+ By
+ Euler’s
+ theorem,
+ large
+ triangular
+ model
+ typically
+ has
+ about
+ twice
+more
+ triangles
+ than
+ vertices,
+ i
+.
+e
+.
+,
+ m
+ 
+ 2
+n
+•
+ Total
+ memory
+ requirement
+:
+•
+ Explicit
+ method
+ requires
+ array
+ of
+ m
+ triangles
+•
+ Each
+ element
+ in
+ array
+ contains
+ data
+ for
+ 3
+ vertices
+•
+ Each
+ vertex
+ requires
+ 32
+ bytes
+•
+ Total
+ memory
+ requirement
+:
+ 3
+
+32
+
+m
+ 
+ 96
+m
+ bytes
+•
+ Total
+ data
+ transfer
+ from
+ buffer
+ to
+ vertex
+ shader
+:
+ 96
+m
+ bytes
+
+--- PAGE 17 ---
+Non
+-
+Indexed (Explicit) Representation 
+(4/4)
+•5/10/2024 •17
+•
+ Advantage
+•
+ Simplicity?
+•
+ Disadvantages
+•
+ High
+ storage
+ size
+ –
+ vertices
+ stored
+ multiple
+ times
+•
+ Vertex
+ shader
+ requires
+ greater
+ time
+ to
+ transform,
+ light,
+ and
+ clip
+duplicated
+ vertices
+•
+ Seldom
+ used
+ by
+ application
+ programmers
+ for
+ general
+ meshes
+•
+ But,
+ many
+ graphics
+ drivers
+ convert
+ other
+ representations
+ into
+ explicit
+stream
+ when
+ sending
+ data
+ to
+ vertex
+ shader
+
+--- PAGE 18 ---
+Indexed Representation (1/3)
+•5/10/2024 •18
+•
+ Each
+ vertex
+ stored
+ once
+ in
+ a
+ vertex
+ list
+•
+ Triangles
+ represented
+ by
+ list
+ of
+ indices
+ into
+ vertex
+ array
+struct Triangle_Indexed { 
+  // indices into vertex array 
+  GLushort i0, i1, i2; 
+}; 
+ 
+struct TriMesh_Indexed { 
+  GLint vtx_cnt, tri_cnt; 
+  Vertex *p_vtxlist; // vertex list 
+  // triangle list 
+  Triangle_Indexed *p_trilist;  
+}; 
+
+--- PAGE 19 ---
+Indexed Representation (2/3)
+•5/10/2024 •19
+v
+0
+v
+1
+v
+2
+v
+3
+v
+6
+v
+4
+v
+5
+T
+0
+T
+1
+ T
+2
+T
+3
+T
+4
+T
+5
+T0 0 1 2
+T1 1 3 2
+T2 3 4 2
+T3 4 5 2
+T4 1 6 3
+T5 3 6 4
+v0
+v1
+v2
+v3
+v4
+v5
+v6
+
+--- PAGE 20 ---
+Indexed Representation 
+(3/3)
+•5/10/2024 •20
+•
+ Assume
+ model
+ has
+ m
+ triangles
+ and
+ n
+ vertices
+•
+ Use
+ approximation
+ m
+ 
+ 2
+n
+•
+ Total
+ memory
+ requirement
+:
+•
+ Indexed
+ method
+ requires
+ arrays
+ of
+ n
+ vertices
+ and
+ m
+ triangles
+•
+ Each
+ vertex
+ requires
+ 32
+ bytes
+•
+ Each
+ vertex
+ index
+ requires
+ 2
+ bytes
+•
+ Each
+ element
+ in
+ triangle
+ array
+ refers
+ to
+ its
+ 3
+ vertices
+ using
+ indices
+•
+ Total
+ memory
+ requirement
+:
+ 32
+
+n
+ 
+ 6
+
+m
+ 
+ 22
+m
+ bytes
+•
+ However,
+ data
+ transfer
+ is
+:
+ m
+
+3
+
+2
+
+32
+
+ 
+ 102
+m
+ bytes
+
+--- PAGE 21 ---
+Triangle Strips: Representation (1/1)
+•5/10/2024 •21
+•
+ Organization
+ of
+ triangular
+ faces
+ in
+ mesh
+ as
+ sequence
+ of
+contiguous
+ triangles
+•
+ First
+ triangle
+ in
+ strip
+ requires
+ three
+ vertices
+•
+ Subsequent
+ triangles
+ use
+ one
+ additional
+ vertex
+•
+ Requires
+ GPU
+ to
+ have
+ vertex
+ cache
+ for
+ two
+ vertices
+
+--- PAGE 22 ---
+Triangle Strips: Representation (2/2)
+•5/10/2024 •22
+slices = 3
+stacks =2 slices = 3
+stacks =2
+𝒗 𝟎 𝒗 𝟏 𝒗 𝟐 𝒗 𝟑
+𝒗 𝟖 𝒗 𝟗 𝒗 𝟏𝟎 𝒗 𝟏𝟏
+𝒗 𝟒 𝒗 𝟓 𝒗 𝟔 𝒗 𝟕
+𝒕𝟎 𝒕𝟐 𝒕𝟒
+𝒕𝟑𝒕𝟏 𝒕𝟓
+𝒕𝟔 𝒕𝟖 𝒕𝟏𝟎
+𝒕𝟗𝒕𝟕 𝒕𝟏𝟏
+slices = 3
+stacks =2
+
+--- PAGE 23 ---
+Triangle Strips: Representation (3/3)
+•5/10/2024 •23
+𝒗 𝟒
+𝒗 𝟎
+𝒗 𝟓
+𝒗 𝟏
+𝒗 𝟔
+𝒗 𝟐
+𝒗 𝟕
+𝒗 𝟑
+𝒗 𝟑
+𝒗 𝟖
+𝒕𝟎
+𝒕𝟏
+𝒕𝟐
+𝒕𝟑
+𝒕𝟒
+𝒕𝟓
+𝒕𝟔
+𝒕𝟕
+
+--- PAGE 24 ---
+Triangle Strips: Explicit Representation 
+(1/2)
+•5/10/2024 •24
+•
+ Assume
+ model
+ has
+ m
+ triangles
+ and
+ n
+ vertices
+•
+ Use
+ approximation
+ m
+ 
+ 2
+n
+•
+ Let
+ b
+ be
+ strip
+ bloat
+ factor
+ accounting
+ for
+ costs
+ of
+restarting
+ strips
+ and
+ overriding
+ strip
+ direction
+•
+ Typically
+,
+ 1
+.
+1
+ 
+ b
+ 
+ 1
+.
+5
+•
+ Overall
+ size
+ of
+ representation
+ is
+ 32
+bm
+•
+ Data
+ transfer
+ size
+:
+ 32
+bm
+ bytes
+
+--- PAGE 25 ---
+Triangle Strips: Explicit Representation 
+(2/2)
+•5/10/2024 •25
+v
+0
+v
+1
+v
+2
+v
+3
+v
+6
+v
+4
+v
+5
+T
+0
+T
+1
+ T
+2
+T
+3
+T
+4
+ T
+5
+v
+4
+ T
+2
+v
+2
+v
+3
+ T
+1
+v
+2
+ T
+0
+v
+1
+v
+0
+
+1
+v
+5
+ T
+3
+v
+3
+ T
+4
+v
+6
+v
+1
+
+1
+v
+4
+ T
+5
+
+
+--- PAGE 26 ---
+Triangle Strip: Indexed Representation 
+(1/2)
+•5/10/2024 •26
+•
+ Again
+ mesh
+ consists
+ of
+ vertex
+ array
+ and
+ triangles
+ that
+refer
+ to
+ these
+ vertices
+ through
+ indices
+•
+ Except,
+ triangles
+ are
+ organized
+ into
+ strips
+v
+0
+v
+1
+v
+2
+v
+3
+v
+6
+v
+4
+v
+5
+T
+0
+T
+1
+ T
+2
+T
+3
+T
+4
+T
+5
+4  
+T
+4
+2
+3
+ T
+1
+2
+ T
+0
+1
+0
+
+1
+5
+ T
+3
+3
+ T
+4
+6
+1
+
+1
+4
+ T
+5
+v0
+v1
+v2
+v3
+v4
+v5
+v6
+
+--- PAGE 27 ---
+Triangle Strip: Indexed Representation 
+(2/2
+)
+•5/10/2024 •27
+•
+ Assume
+ model
+ has
+ m
+ triangles
+ and
+ n
+ vertices
+•
+ Use
+ approximation
+ m
+ 
+ 2
+n
+•
+ Memory
+ use
+:
+ 32
+
+n
+ +
+ 2
+
+b
+
+m
+ 
+ (
+16
+ +
+ 2
+b
+)
+m
+ bytes
+•
+ Data
+ transfer
+ size
+:
+ 34
+bm
+ bytes
+
+--- PAGE 28 ---
+Triangle Fan Representation
+•5/10/2024 •28
+•𝒗 𝟎
+•𝒗 𝟏
+•𝒗 𝟐
+•𝒗 𝟑
+•𝒗 𝟒
+•𝒗 𝟓
+•𝒗 𝟔
+
+--- PAGE 29 ---
+Which Representation is Better?
+•5/10/2024 •29
+
+ 34
+bm
+
+ 
+16 
+
+2
+b
+
+m
+Indexed Triangle Strips
+
+ 32
+bm
+
+ 32
+bm
+Triangle Strips
+102
+m
+22
+m
+Indexed Triangles
+96
+m
+96
+m
+Explicit Triangles
+Transfer Size
+Memory Size
+Mesh Organization

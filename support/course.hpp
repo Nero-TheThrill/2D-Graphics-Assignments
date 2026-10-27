@@ -185,40 +185,9 @@ struct Image
     std::vector<unsigned char> rgb;
 };
 
-inline Image loadPpm(const std::string& path)
-{
-    std::ifstream file(path, std::ios::binary);
-    require(static_cast<bool>(file), "Cannot open image: " + path);
-
-    Image image;
-    std::string magic;
-    int maxValue = 0;
-
-    file >> magic >> image.width >> image.height >> maxValue;
-    file.get();
-
-    require(
-        magic == "P6" && image.width > 0 && image.height > 0 && maxValue == 255,
-        "Expected bundled P6 PPM"
-    );
-
-    image.rgb.resize(
-        static_cast<std::size_t>(image.width) *
-        static_cast<std::size_t>(image.height) * 3
-    );
-
-    file.read(
-        reinterpret_cast<char*>(image.rgb.data()),
-        static_cast<std::streamsize>(image.rgb.size())
-    );
-
-    require(static_cast<bool>(file), "Incomplete image");
-
-    return image;
-}
-
-// PPM loader leaves the first file scanline at v = 0.
+// PNG decoding is provided in image.cpp. Rows remain top-to-bottom.
 // A4 handles orientation through UV coordinates.
+Image loadPng(const std::string& path);
 
 
 // -----------------------------------------------------------------------------

@@ -10,6 +10,6 @@ out vec4 fragColor;
 
 void main()
 {
-    // TODO A4.8b: sample texture when uTextured, otherwise keep the colored houses.
+    // TODO A4.7b: sample texture when uTextured, otherwise keep the colored houses.
     fragColor = vec4(vColor, 1.0);
 }

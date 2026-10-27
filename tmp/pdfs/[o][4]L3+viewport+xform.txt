@@ -1,0 +1,153 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+Viewport Transformation
+Prasanna Ghali
+
+--- PAGE 2 ---
+•
+ Rendering
+ pipeline
+ for
+ 2
+D
+ applications
+:
+ different
+ coordinate
+ systems
+ that
+2
+D
+ objects
+ [and
+ their
+ primitives]
+ must
+ transition
+ thro’
+ in
+ rendering
+ pipeline
+2
+D 
+Rendering Pipe: Coordinate Systems
+•2•5/3/2024
+Model TransformationModel 
+Coordinates
+Application/World 
+Coordinates
+View Coordinates
+From Modeling
+Software View/Camera/Eye
+Transformation
+Camera window to NDC transformation
+Viewport Transformation To Framebuffer
+𝑥
+𝑚
+,
+ 𝑦
+𝑚
+ 𝑥
+𝑤
+,
+ 𝑦
+𝑤
+𝑥
+𝑣
+,
+ 𝑦
+𝑣
+𝑥
+𝑛
+,
+ 𝑦
+𝑛
+ 𝑥
+𝑑
+,
+ 𝑦
+𝑑
+Normalized Device
+Coordinates
+Screen/Device/Window/Pixel 
+Coordinates
+
+--- PAGE 3 ---
+Normalized Device Coordinates
+•5/3/2024 •3
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+ 0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+
+--- PAGE 4 ---
+Display 
+Coordinate System
+•5/3/2024 •4
+
+
+--- PAGE 5 ---
+Window in Display Device
+•5/3/2024 •5
+
+
+--- PAGE 6 ---
+OpenGL Window Coordinate System
+•5/3/2024 •6
+
+
+--- PAGE 7 ---
+OpenGL Viewport in Window Coordinate 
+System
+•5/3/2024 •7
+
+
+--- PAGE 8 ---
+Viewport Transformation
+•5/3/2024 •8
+
+
+--- PAGE 9 ---
+Viewport Transformation Matrix
+•5/3/2024 •9
+𝐌
+𝒗𝒊𝒆𝒘𝒑𝒐𝒓𝒕
+ =
+𝑾
+𝒗𝒑
+2
+ 0
+ 𝒙
+𝒃𝒍
+𝒅
+ +
+ 𝑾
+𝒗𝒑
+2
+0
+ 𝑯
+𝒗𝒑
+2
+ 𝒚
+𝒃𝒍
+𝒅
+ +
+ 𝑯
+𝒗𝒑
+2
+0
+ 0
+ 1

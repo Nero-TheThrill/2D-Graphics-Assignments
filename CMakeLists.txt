@@ -13,7 +13,7 @@ endif()
 message(STATUS "Cumulative source track: ${TRACK}")
 foreach(n RANGE 1 4)
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${n}/main.cpp")
-    add_executable(a${n} ${TRACK}/a${n}/main.cpp)
+    add_executable(a${n} ${TRACK}/a${n}/main.cpp support/image.cpp)
     target_include_directories(a${n} PRIVATE support)
     # Later assignments actually compile earlier work, rather than copying its answer.
     foreach(previous RANGE 1 ${n})
@@ -23,7 +23,17 @@ foreach(n RANGE 1 4)
       COURSE_TRACK="${TRACK}"
       COURSE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}"
       SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${n}")
-    target_link_libraries(a${n} PRIVATE glfw GLEW::GLEW OpenGL::GL)
+    target_link_libraries(a${n} PRIVATE glfw GLEW::GLEW OpenGL::GL windowscodecs ole32)
     set_target_properties(a${n} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
   endif()
 endforeach()
+
+# Teacher-only checks; the student package does not need teacher/ or solutions/.
+if(TRACK STREQUAL "solutions" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/teacher/verify.cpp")
+  add_executable(verify_solutions teacher/verify.cpp support/image.cpp)
+  target_include_directories(verify_solutions PRIVATE support solutions/a1 solutions/a2 solutions/a3 solutions/a4)
+  target_compile_definitions(verify_solutions PRIVATE
+    COURSE_TRACK="solutions"
+    COURSE_ROOT="${CMAKE_CURRENT_SOURCE_DIR}")
+  target_link_libraries(verify_solutions PRIVATE glfw GLEW::GLEW OpenGL::GL windowscodecs ole32)
+endif()

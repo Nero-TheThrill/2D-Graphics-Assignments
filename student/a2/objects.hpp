@@ -45,7 +45,7 @@ inline std::vector<Object> makeObjects(const Mesh& mesh)
 
 inline void updateObject(Object& o, const App& app)
 {
-    // TODO A2.4: WASD translation, Q/E rotation, Z/X scale, R reset; use app.dt.
+    // TODO A2.4: WASD translation, Q/E rotation, Z/X scale, R resets position/angle/size to (0,0)/0/(1,1); use app.dt.
     // Only modify o; do not recreate the VBO or modify shared mesh vertices.
 }
 

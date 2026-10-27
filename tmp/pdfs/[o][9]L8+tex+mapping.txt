@@ -1,0 +1,1494 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+Introduction to Texture Mapping
+Prasanna Ghali
+
+--- PAGE 2 ---
+Simplified 3D Graphics Pipe 
+•5/18/2024 •2
+Vertex 
+Shader
+Model
+-
+to
+-
+World Coordinates
+World
+-
+to
+-
+View Coordinates
+View
+-
+to
+-
+Clip Coordinates
+Clipping
+Projection
+(Clip
+-
+to
+-
+NDC Coordinates)
+Viewport Transform
+(NDC
+-
+to
+-
+Window Coordinates)
+R
+A
+S
+T
+E
+R
+I
+Z
+E
+R
+Frame Buffer
+Compute Color
+Fragment 
+Shader
+Per Fragment
+Operations
+Blending
+Logical Operations
+Alpha Test
+Stencil Test
+Depth Test
+Scissor Test 
+Textures
+Vertex
+Fetch
+Vertex Data
+
+--- PAGE 3 ---
+•5/18/2024 •3
+What is Texture Mapping
+? (1/3)
+•
+ Images
+ synthesized
+ from
+ polygonal
+ models
+ lack
+ details
+and
+ richness
+ of
+ real
+ surfaces
+•
+ Imperfections
+ caused
+ by
+ wear
+ and
+ tear
+•
+ Irregular
+ color
+ variations
+•
+ Properties
+ of
+ natural
+ materials
+ such
+ as
+ stone,
+ wood,
+ soil,
+ …
+
+
+--- PAGE 4 ---
+What is Texture Mapping? (2/3)
+•
+ Texture
+ mapping
+ is
+ technique
+ for
+ taking
+ simple
+ polygon
+and
+ giving
+ it
+ appearance
+ of
+ something
+ more
+ complex
+•
+ Adds
+ detail
+ to
+ polygonal
+ surfaces
+ using
+ images,
+functions,
+ or
+ other
+ data
+ sources
+ to
+ make
+ surface
+ color
+vary
+ from
+ point
+ to
+ point
+•
+ De
+ rigueur
+ in
+ modern
+ GPUs
+ to
+ add
+ detail
+ without
+increasing
+ complexity
+ of
+ 3
+D
+ models
+•5/18/2024 •4
+
+--- PAGE 5 ---
+What is Texture Mapping? (3/3)
+•
+ Technique
+ for
+ adding
+ detail
+ to
+ surfaces
+ using
+ images,
+functions,
+ or
+ other
+ data
+ sources
+•
+ We’re
+ concerned
+ with
+ image
+ mapping
+•5/18/2024 •5
+
+--- PAGE 6 ---
+What is Texture Mapping?
+•
+ Texture
+ mapping
+ involves
+ mapping
+ an
+ image
+ called
+texture
+ to
+ simpler
+ surface
+•5/18/2024 •6
+
+
+--- PAGE 7 ---
+Texture Images and 
+Texels
+•
+ Texture
+ image
+ is
+ discrete
+ collection
+ of
+ color
+ samples
+•
+ Each
+ color
+ sample
+ called
+ texel
+ (
+tex
+ture
+ el
+ement)
+•
+ Better
+ performance
+ when
+ images
+ have
+ powers
+-
+of
+-
+two
+ dimensions
+•
+ One
+-
+dimensional
+ textures
+ suitable
+ for
+ linear
+ primitives
+ such
+as
+ lines
+•
+ Two
+-
+dimensional
+ textures
+ suitable
+ for
+ planar
+ primitives
+ such
+as
+ triangles
+ –
+ we’re
+ only
+ concerned
+ with
+ rectangular
+textures
+•
+ Three
+-
+dimensional
+ textures
+ suitable
+ for
+ volumetric
+ objects
+•5/18/2024 •7
+
+--- PAGE 8 ---
+Texture Images and 
+Texels
+ (1/2)
+•
+ To
+ identify
+ texels
+,
+ texture
+images
+ come
+ with
+ their
+ own
+discrete
+ coordinate
+ system
+called
+ texel
+ space
+•
+ In
+ OpenGL,
+ texel
+ referenced
+by
+ integral
+ 2
+-
+tuple
+ (
+𝑆
+,
+ 𝑇
+)
+ with
+origin
+ at
+ bottom
+-
+left
+ corner
+•
+ Reverse of notation for 
+referencing 
+texel’s
+corresponding memory 
+location in C/C++
+•5/18/2024 •8
+(
+0
+,
+ 0
+)
+ 𝑆
+𝑇
+𝑤
+ℎ
+(
+𝑤
+,
+ ℎ
+)
+(
+𝑤
+,
+ 0
+)
+(
+0
+,
+ ℎ
+)
+(
+27
+,
+ 12
+)
+
+--- PAGE 9 ---
+Texture Images and 
+Texels
+ (2/2)
+•
+ In
+ addition
+ to
+ width
+ and
+ height,
+ other
+ consideration
+ is
+format
+ of
+ data
+ specified
+ at
+ each
+ texel
+•
+ Image
+ sample
+ represented
+ in
+ variety
+ of
+ formats
+:
+•
+ 16
+ or
+ 24
+ bit
+ RGB,
+ 32
+ bit
+ RGBA,
+ various
+ color
+ index
+ methods,
+…
+•5/18/2024 •9
+
+--- PAGE 10 ---
+Texture Coordinates
+•
+ Texture
+ coordinates
+ –
+ specified
+ at
+ each
+ vertex
+ –
+ define
+where
+ texels
+ appear
+ on
+ polygonal
+ (texture)
+ surface
+•
+ They
+ control
+ texture’s
+ placement
+ on
+ surface
+ by
+ determining
+which
+ texels
+ in
+ texture
+ image
+ correspond
+ to
+ which
+ vertices
+on
+ surface
+•5/18/2024
+ •10
+
+--- PAGE 11 ---
+Texture Space (1/2)
+•
+ Texture
+ coordinates
+ are
+ specified
+ in
+ normalized
+coordinate
+ system
+ called
+ texture
+ space
+•
+ OpenGL
+ uses
+ 𝑠
+ for
+ horizontal
+ axis
+ ranging
+ from
+ left
+ to
+ right
+and
+ 𝑡
+ for
+ vertical
+ axis
+ ranging
+ from
+ bottom
+ to
+ top
+ with
+ origin
+at
+ bottom
+-
+left
+•5/18/2024 •11
+
+
+--- PAGE 12 ---
+Texture Space (2/2)
+•
+ Unit
+ texture
+ space
+ 𝑠
+,
+ 𝑡
+ ∈
+ 0
+,
+ 1
+ ×
+ 0
+,
+ 1
+ is
+ mapping
+ of
+discrete
+ texel
+ space
+ to
+ continuous
+ texture
+ space
+•
+ More
+ practical
+ and
+ efficient
+ to
+ use
+ texture
+ coordinates
+rather
+ than
+ texel
+ coordinates
+:
+•
+ T
+exture
+ coordinates
+ are
+ independent
+ of
+ texture
+ image’s
+ width
+and
+ height
+ and
+ therefore
+ don’t
+ need
+ to
+ be
+ recomputed
+ when
+texture
+ image’s
+ dimensions
+ change
+ or
+ when
+ different
+ texture
+image
+ is
+ used
+•5/18/2024 •12
+
+--- PAGE 13 ---
+Understanding Texture Coordinates (1/2)
+•
+ On
+ left,
+ we’ve
+ texture
+ image
+ defined
+ in
+ texture
+ space
+•
+ On
+ right,
+ we’ve
+ polygon
+ onto
+ which
+ entire
+ texture
+ image
+is
+ to
+ be
+ pasted
+•5/18/2024 •13
+
+
+--- PAGE 14 ---
+Understanding Texture Coordinates (2/2)
+•
+ Image
+ will
+ be
+ “stretched”
+ to
+ fit
+ polygon
+•
+ Rasterizer
+ will
+ interpolate
+ texture
+ coordinates
+ assigned
+ to
+each
+ vertex
+ to
+ compute
+ texture
+ coordinates
+ for
+ interior
+ points
+•5/18/2024 •14
+
+
+--- PAGE 15 ---
+Understanding Texture Coordinates (2/2)
+•
+ Rasterizer
+ will
+ interpolate
+ texture
+ coordinates
+ assigned
+to
+ each
+ vertex
+ to
+ compute
+ texture
+ coordinates
+ for
+interior
+ points
+•
+ Next,
+ texture
+ coordinates
+ are
+ mapped
+ to
+ texel
+coordinates
+ to
+ retrieve
+ color
+ from
+ image
+•5/18/2024 •15
+
+
+--- PAGE 16 ---
+Mapping Texture Coordinates to Texel 
+Coordinates (1/2)
+•5/18/2024 •16
+(
+0
+,
+ 0
+)
+ (
+1
+,
+ 0
+)
+(
+1
+,
+ 1
+)
+(
+0
+,
+ 1
+)
+𝑠
+𝑡
+(
+0
+,
+ 0
+)
+ (
+𝑤
+,
+ 0
+)
+(
+𝑤
+,
+ ℎ
+)
+(
+0
+,
+ ℎ
+)
+𝑆
+𝑇
+Texture
+ space
+ Texel
+ space
+(
+𝑠
+,
+ 𝑡
+)
+ (
+𝑆
+,
+ 𝑇
+)
+𝑠
+ ∗
+ 𝑤
+,
+ 𝑡
+ ∗
+ ℎ
+ →
+ 𝑆
+,
+ 𝑇
+
+--- PAGE 17 ---
+Mapping Texture Coordinates to Texel 
+Coordinates 
+(2/2
+)
+•
+ Fragment
+ 𝑥
+,
+ 𝑦
+ on
+ surface
+ with
+ interpolated
+ texture
+coordinates
+ 𝑠
+,
+ 𝑡
+ has
+ floating
+-
+point
+ texel
+ coordinates
+𝑆
+,
+ 𝑇
+ =
+ 𝑤
+ ∗
+ 𝑠
+,
+ ℎ
+ ∗
+ 𝑡
+•
+ Point
+ sampling
+ selects
+ single
+ texel
+ value
+ containing
+texture
+ coordinate’s
+ sample
+ point
+ 𝑆
+,
+ 𝑇
+•
+ Integer
+ coordinates
+ of
+ selected
+ texel
+ are
+ 𝑆
+ ,
+ 𝑇
+•5/18/2024 •17
+
+--- PAGE 18 ---
+Wrapping Modes (1/2)
+•
+ Values
+ of
+ 𝑠
+ and
+ 𝑡
+ outside
+ [
+0
+,
+ 1
+]
+ don’t
+ map
+ to
+ image,
+ but
+such
+ values
+ are
+ still
+ valid
+ as
+ texture
+ coordinates
+•
+ Why
+ would
+ texture
+ coordinates
+ be
+ outside
+ [
+0
+,
+ 1
+]
+?
+•
+ When
+ we
+ want
+ to
+ texture
+ map
+ an
+ image
+ across
+ polygon
+surface
+ with
+ dimensions
+ larger
+ than
+ texture
+ dimensions
+•5/18/2024 •18
+
+--- PAGE 19 ---
+Wrapping Modes (2/2)
+•
+ To
+ paste
+ (small)
+ texture
+ image
+ on
+ (large)
+ polygon,
+texture
+ coordinates
+ must
+ be
+ wrapped
+ for
+ corresponding
+texel
+ coordinates
+ to
+ access
+ valid
+ texel
+ data
+•
+ Two
+ basic
+ wrapping
+ modes
+:
+•
+ Repeat
+ –
+ repeats
+ image
+ by
+ ignoring
+ integer
+ part
+ of
+ texture
+coordinate
+ and
+ retaining
+ fractional
+ part
+•
+ Clamp
+-
+to
+-
+edge
+ –
+ clamps
+ texture
+ coordinate
+ to
+ closest
+ texel
+on
+ edge
+ of
+ texture
+ map
+•5/18/2024 •19
+
+--- PAGE 20 ---
+Wrapping with Repeat (1/2)
+•5/18/2024 •20
+
+
+--- PAGE 21 ---
+•
+ Image
+ repeated
+ across
+ polygon
+ independently
+ in
+horizontal
+ and
+ vertical
+ directions
+•
+ Also
+ known
+ as
+ tiling
+•
+ How?
+•
+ Integer
+ part
+ of
+ either
+ 𝑠
+ or
+ 𝑡
+,
+ or
+ both
+ 𝑠
+ and
+ 𝑡
+ is
+ dropped
+𝑟𝑒𝑝𝑒𝑎𝑡
+ 𝑠
+ ←
+ 𝑠
+ −
+ 𝑠
+𝑟𝑒𝑝𝑒𝑎𝑡
+ 𝑡
+ ←
+ 𝑡
+ −
+ 𝑡
+Wrapping with Repeat 
+(2/2
+)
+•5/18/2024 •21
+𝑠 is largest integer smaller 
+than real number 𝑠
+𝑠 − 𝑠 is fractional part
+of real number 𝑠
+
+--- PAGE 22 ---
+Wrapping with Mirror (1/2)
+•5/18/2024 •22
+(
+0
+,
+ 0
+)
+(
+0
+,
+ 2
+)
+ (
+2
+,
+ 2
+)
+(
+2
+,
+ 0
+)
+
+--- PAGE 23 ---
+•
+ Image
+ repeated
+ across
+ polygon
+ independently
+ in
+horizontal
+ and
+ vertical
+ directions
+ but
+ flipped
+ on
+ every
+other
+ repetition
+Wrapping with 
+Mirror (2/2
+)
+•5/18/2024 •23
+𝑚𝑖𝑟𝑟𝑜𝑟
+ 𝑠
+ ←
+ ቊ
+ 𝑠
+ −
+ 𝑠
+ 𝑠
+ 𝑖𝑠
+ 𝑒𝑣𝑒𝑛
+1
+.
+0
+ −
+ 𝑠
+ −
+ 𝑠
+ 𝑠
+ 𝑖𝑠
+ 𝑜𝑑𝑑
+𝑚𝑖𝑟𝑟𝑜𝑟
+ 𝑡
+ ←
+ ቊ
+ 𝑡
+ −
+ 𝑡
+ 𝑡
+ 𝑖𝑠
+ 𝑒𝑣𝑒𝑛
+1
+.
+0
+ −
+ 𝑡
+ −
+ 𝑡
+ 𝑡
+ 𝑖𝑠
+ 𝑜𝑑𝑑
+
+--- PAGE 24 ---
+Wrapping with Clamp
+-
+to
+-
+Edge
+•5/18/2024 •24
+(
+0
+,
+ 0
+)
+(
+0
+,
+ 2
+)
+ (
+2
+,
+ 2
+)
+(
+2
+,
+ 0
+)
+𝑐𝑙𝑎𝑚𝑝
+ 𝑠
+ ←
+ 𝑚𝑎𝑥
+ 𝑚𝑖𝑛
+ 𝑠
+,
+ 1
+.
+0
+ ,
+ 0
+.
+0
+𝑐𝑙𝑎𝑚𝑝
+ 𝑡
+ ←
+ 𝑚𝑎𝑥
+ 𝑚𝑖𝑛
+ 𝑡
+,
+ 1
+.
+0
+ ,
+ 0
+.
+0
+
+--- PAGE 25 ---
+Color Combiner or Texture Blending 
+Modes
+•
+ At
+ each
+ fragment,
+ we’ve
+ color
+ from
+ texturing
+ and
+ say
+color
+ from
+ lighting
+ (we’ll
+ call
+ this
+ color
+ a
+ surface
+ color)
+•
+ Texture
+ color
+ can
+ be
+ further
+ transformed
+ with
+ surface
+color
+ using
+ color
+ combine
+ or
+ texture
+ blending
+ modes
+•
+ Decal
+•
+ Modulate
+•
+ Replace
+•5/18/2024 •25
+
+--- PAGE 26 ---
+Decal Mode (1/2)
+•5/18/2024 •26
+
+
+--- PAGE 27 ---
+Decal Mode (2/2)
+•
+ Texture
+ alpha
+ value
+ 𝛼
+ blends
+ between
+ surface
+ and
+texture
+ colors
+•
+ If
+ surface
+ color
+ is
+ 𝐶
+𝑠
+ =
+ 𝑟
+𝑠
+,
+ 𝑔
+𝑠
+,
+ 𝑏
+𝑠
+ and
+ texture
+ color
+ is
+𝐶
+𝑡
+ =
+ 𝑟
+𝑡
+,
+ 𝑔
+𝑡
+,
+ 𝑏
+𝑡
+,
+ 𝛼
+𝑡
+ ,
+ then
+ final
+ color
+ is
+𝐶
+ =
+ 𝐶
+𝑠
+ +
+ 𝛼
+𝑡
+ 𝐶
+𝑡
+ −
+ 𝐶
+𝑠
+•5/18/2024 •27
+
+--- PAGE 28 ---
+Modulate Mode 
+(1/2
+)
+•5/18/2024 •28
+
+
+--- PAGE 29 ---
+Modulate Mode (2/2)
+•
+ Texture
+ color
+ modulated
+ by
+ surface
+ color
+ to
+ give
+ surface
+shaded
+ appearance
+•
+ If
+ surface
+ color
+ is
+ 𝐶
+𝑠
+ =
+ 𝑟
+𝑠
+,
+ 𝑔
+𝑠
+,
+ 𝑏
+𝑠
+ and
+ texture
+ color
+ is
+𝐶
+𝑡
+ =
+ 𝑟
+𝑡
+,
+ 𝑔
+𝑡
+,
+ 𝑏
+𝑡
+ ,
+ then
+ final
+ color
+ is
+𝐶
+ =
+ 𝐶
+𝑠
+⨂
+𝐶
+𝑡
+ =
+ 𝑟
+𝑠
+𝑟
+𝑡
+,
+ 𝑔
+𝑠
+𝑔
+𝑡
+,
+ 𝑏
+𝑠
+𝑏
+𝑡
+•5/18/2024 •29
+
+--- PAGE 30 ---
+Replace Mode (1/2
+)
+•5/18/2024 •30
+
+
+--- PAGE 31 ---
+Replace Mode (2/2)
+•
+ Texture
+ color
+ replaces/overwrites
+ surface
+ color
+•
+ If
+ surface
+ color
+ is
+ 𝐶
+𝑠
+ =
+ 𝑟
+𝑠
+,
+ 𝑔
+𝑠
+,
+ 𝑏
+𝑠
+ and
+ texture
+ color
+ is
+𝐶
+𝑡
+ =
+ 𝑟
+𝑡
+,
+ 𝑔
+𝑡
+,
+ 𝑏
+𝑡
+ ,
+ then
+ final
+ color
+ is
+𝐶
+ =
+ 𝐶
+𝑡
+ =
+ 𝑟
+𝑡
+,
+ 𝑔
+𝑡
+,
+ 𝑏
+𝑡
+•5/18/2024 •31
+
+--- PAGE 32 ---
+Texture Mapping in OpenGL
+•
+ In
+ order
+ to
+ use
+ texture
+ mapping
+ in
+ OpenGL
+ applications,
+following
+ steps
+ must
+ be
+ implemented
+:
+•
+ Create
+ a
+ texture
+ object
+ and
+ load
+ texel
+ data
+ into
+ it
+•
+ Specify
+ sampling
+ parameters
+ such
+ as
+ wrapping,
+ filtering
+•
+ Include
+ texture
+ coordinates
+ as
+ an
+ attribute
+ to
+ vertices
+•
+ Associate
+ a
+ texture
+ sampler
+ with
+ each
+ texture
+ map
+ used
+ in
+ a
+fragment
+ shader
+•
+ For
+ each
+ fragment,
+ retrieve
+ texel
+ values
+ through
+ texture
+ sampler
+in
+ the
+ fragment
+ shader
+•
+ Use
+ texel
+ value
+ to
+ specify
+ corresponding
+ fragment’s
+ color
+ …
+•
+ Tutorial
+ will
+ be
+ assigned
+ to
+ go
+ thro’
+ above
+ steps
+•5/18/2024 •32

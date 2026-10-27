@@ -29,7 +29,7 @@ inline void updateCamera(Camera& c, const App& app)
 
 inline std::vector<Object> makeWorld(const Mesh& mesh)
 {
-    // TODO A3.4: create at least 15 houses in world coordinates extending beyond the camera.
+    // TODO A3.4: place houses both inside and outside the initial camera view.
     return makeObjects(mesh);
 }
 

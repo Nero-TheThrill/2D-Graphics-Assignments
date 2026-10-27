@@ -17,6 +17,6 @@ void main()
     gl_Position = vec4(p.xy, 0.0, 1.0);
     vColor = aColor;
 
-    // TODO A4.8a: map quad UV to the selected atlas region.
+    // TODO A4.7a: map quad UV to the selected atlas region.
     vUv = aUv;
 }

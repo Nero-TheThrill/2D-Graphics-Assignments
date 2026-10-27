@@ -19,8 +19,8 @@ int main(int argc, char** argv)
         Camera camera;
 
         Texture atlas, checker;
-        createTexture(atlas, loadPpm(std::string(COURSE_ROOT) + "/assets/atlas.ppm"));
-        createTexture(checker, loadPpm(std::string(COURSE_ROOT) + "/assets/checker.ppm"));
+        createTexture(atlas, loadPng(std::string(COURSE_ROOT) + "/assets/atlas.png"));
+        createTexture(checker, loadPng(std::string(COURSE_ROOT) + "/assets/checker.png"));
 
         bool linear = false, repeat = true;
         textureSettings(atlas, linear, false);
@@ -28,10 +28,10 @@ int main(int argc, char** argv)
 
         std::vector<Sprite> sprites;
 
-        // TODO A4.9: create three sprites sharing quad and atlas; different frames/speeds/positions.
-        // Object owns transform state; Sprite adds a Texture pointer and Animation.
+        // TODO A4.8: create two static sprites sharing quad and atlas.
+        // Use different tile numbers (0..7) and positions visible to the initial camera.
 
-        Sprite wrapDemo{{&quad, {0, -1.5f}, 0, {2, 1}}, &checker, {}};
+        Sprite wrapDemo{{&quad, {0, -1.5f}, 0, {2, 1}}, &checker, 0};
 
         while (app.begin())
         {
@@ -41,9 +41,10 @@ int main(int argc, char** argv)
             glUseProgram(program.id);
             uploadCamera(program.id, camera, app.width, app.height);
 
-            // TODO A4.10: F/V toggles, Space pause, N step while paused, update each animation.
+            // TODO A4.9: F toggles filtering for both textures; V toggles checker wrapping.
+            // Apply the new settings with textureSettings; keep atlas wrapping clamped.
             // Use pressed for toggles; down would toggle every frame.
-            // Color-only mode must be restored each frame after drawing textured sprites.
+            // Provided: restore color-only mode before drawing the houses.
 
             glProgramUniform1i(program.id, glGetUniformLocation(program.id, "uTextured"), 0);
 
@@ -51,7 +52,7 @@ int main(int argc, char** argv)
                 drawObject(o, program.id);
 
             for (const auto& s : sprites)
-                drawSprite(s, program.id, atlasRect(s.animation.frame, 4, 2, atlas.width, atlas.height));
+                drawSprite(s, program.id, atlasRect(s.tile, 4, 2, atlas.width, atlas.height));
 
             drawSprite(wrapDemo, program.id, {{0, 0}, {3, 3}});
 

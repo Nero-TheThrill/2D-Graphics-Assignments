@@ -1,0 +1,2604 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+Introduction to OpenGL
+Prasanna Ghali
+
+--- PAGE 2 ---
+What is 
+OpenGL API? (1/3)
+•
+ OpenGL
+ =
+ Open
+ Graphics
+ Library
+•
+ Specification
+ of
+ application
+ p
+rogramming
+ interface
+ of
+essential
+ graphics
+ functions
+•
+ Serves
+ as
+ software
+ interface
+ to
+ GPU
+•
+ GPU
+ driver
+ will
+ translate
+ OpenGL
+ API
+ commands
+ to
+machine
+ language
+ instructions
+ that
+ can
+ be
+ executed
+ by
+GPU
+5/10/2024 2
+
+--- PAGE 3 ---
+What is 
+OpenGL API? (2/3)
+•
+ Has
+ evolved
+ from
+ OpenGL
+ 1
+.
+0
+ (
+1992
+)
+ to
+ current
+ version
+OpenGL/GLSL
+ 4
+.
+6
+•
+ Bindings
+ available
+ for
+ lots
+ of
+ popular
+ programming
+languages
+:
+ C/C++,
+ Java,
+ C#,
+ Python,
+ …
+•
+ opengl
+.
+org
+ is
+ best
+ source
+ about
+ everything
+ related
+ to
+OpenGL
+5/10/2024 3
+
+--- PAGE 4 ---
+What is 
+OpenGL? (3/3)
+•
+ Maintained
+ by
+ Khronos
+ Group
+5/10/2024 4
+
+
+--- PAGE 5 ---
+What 
+Does Spec Describe? (1/2)
+•
+ Hundreds
+ of
+ commands
+ specifying
+:
+•
+ Shader
+ programs
+ or
+ shaders
+•
+ Shaders
+ are
+ small
+ user
+-
+defined
+ programs
+ that
+ control
+programmable
+ parts
+ of
+ graphics
+ pipe
+•
+ Data
+ used
+ by
+ shaders
+•
+ State
+ controlling
+ aspects
+ of
+ OpenGL
+ outside
+ scope
+ of
+shaders
+5/10/2024 5
+
+--- PAGE 6 ---
+What 
+Does Spec Describe? (2/2)
+•
+ Spec
+ only
+ says
+ what
+ should
+ be
+ done
+•
+ Not,
+ how
+ it
+ should
+ happen
+•
+ Unlike
+ traditional
+ libraries,
+ OpenGL
+ is
+ not
+ binary
+•
+ GPU
+ manufacturer
+ provides
+ implementation
+ of
+ API
+5/10/2024 6
+
+--- PAGE 7 ---
+Spec Implemented by OpenGL Driver
+5/10/2024 7
+Application
+OpenGL Driver
+GPU Command Buffer
+Video
+Device
+Application
+GPU
+
+--- PAGE 8 ---
+Client
+-
+Server Model
+•
+ Graphics
+ applications
+ running
+ on
+CPU
+ considered
+ client
+•
+ OpenGL
+ implementations
+ provided
+ by
+GPU
+ considered
+ server
+•
+ Client
+ issues
+ commands
+•
+ Server
+ interprets
+ and
+ processes
+commands
+•
+ Network
+ transparent
+ -
+ server
+ may
+ or
+may
+ not
+ operate
+ on
+ same
+ computer
+or
+ same
+ address
+ space
+ as
+ client
+5/10/2024 8
+OpenGL Framework
+OpenGL Driver
+OpenGL Client
+Application
+OpenGL Server
+Graphics Hardware
+Runs
+o
+n
+CPU
+Runs
+o
+n
+GPU
+
+--- PAGE 9 ---
+What Does Spec 
+Not Describe?
+•
+ Independent
+ of
+ operating
+ or
+ windowing
+ systems
+•
+ No
+ support
+ for
+ performing
+ windowing
+ tasks
+•
+ No
+ support
+ for
+ input
+ and
+ output
+ devices
+•
+ Only
+ device
+ supported
+ is
+ framebuffer
+ [which
+ must
+ be
+provided
+ by
+ operating
+ system]
+•
+ Applications
+ must
+ rely
+ on
+ facilities
+ provided
+ by
+ OS
+5/10/2024 9
+
+--- PAGE 10 ---
+OpenGL 4.6 Rendering Pipeline
+5/10/2024 10
+Source
+
+
+--- PAGE 11 ---
+GPU States
+•
+ GPU
+ is
+ stateful
+•
+ Many
+ stages
+•
+ Large
+ number
+ of
+ operations
+ at
+ each
+ stage
+•
+ Each
+ operation
+ has
+ many
+ options
+•
+ Therefore,
+ considerable
+ amount
+ of
+ information
+ must
+ be
+ set
+and
+ maintained
+•
+ This
+ information
+ referred
+ to
+ as
+ state
+ settings
+•
+ Cumulatively,
+ state
+ settings
+ define
+ and
+ specify
+•
+ Behavior
+ of
+ pipe
+,
+ and
+•
+ Transformation
+ of
+ primitives
+ into
+ pixels
+115/10/2024
+
+--- PAGE 12 ---
+OpenGL API
+•
+ OpenGL
+ is
+ stateful
+ API
+ that
+ must
+ manage
+ lots
+ of
+ states
+•
+ Think
+ of
+ OpenGL
+ as
+ state
+ machine
+ for
+ updating
+framebuffer
+ contents
+•
+ Application
+ programs
+ call
+ OpenGL
+ functions
+ to
+ manage
+graphics
+ pipes’
+ state
+ machine
+5/10/2024 12
+
+--- PAGE 13 ---
+OpenGL Context
+•
+ Internal,
+ opaque
+ data
+ structure
+ encapsulating
+ entire
+OpenGL
+ state
+•
+ Keeps track of state settings and operations
+•
+ Reflects underlying state of graphics pipe
+•
+ Initial
+ graphics
+ context
+ has
+ number
+ of
+ default
+ values
+•
+ Primitives are rendered with white color
+•
+ Background color [to write into colorbuffer] is black
+•
+ Zero active textures
+•
+ …. 
+5/10/2024 13
+
+--- PAGE 14 ---
+What Resources are Allocated for 
+OpenGL Application?
+5/10/2024 14
+OpenGL 
+Context
+OpenGL’s internal data structure for keeping 
+track of state settings and operations
+24
+-
+bit Front Color Buffer
+24
+-
+bit Back Color Buffer
+24
+-
+bit Depth Buffer
+8
+-
+bit Stencil Buffer
+Framebuffer
+
+--- PAGE 15 ---
+Color Buffer Format
+•
+ RGB
+ or
+ RGBA
+ data
+5/10/2024 15
+# of bits/color: 
+8
+# of intensities/color: 
+2
+8
+ = 256
+# of bits/pixel: 
+24
+# of intensities/pixel: 
+2
+24
+ = 16,777,216
+# of bits for alpha: 
+8
+Red
+ Green
+ Blue
+ Alpha
+
+--- PAGE 16 ---
+Alpha Values
+•
+ RGBA
+ format
+ is
+ used
+ to
+ provide
+ per
+ fragment
+transparency/translucency
+•
+ 𝛼
+ is 1.0 implies 
+fragment 
+is opaque
+•
+ 𝛼
+ is 0.0 implies 
+fragment 
+is transparent
+•
+ 1
+-
+bit
+ to
+ 8
+-
+bit
+ integral
+ values
+ or
+ 16
+-
+bit/
+32
+-
+bit
+ floating
+ point
+value
+•
+ Example
+ of
+ alpha
+ blending
+ equation
+𝐶
+ =
+ 𝛼
+𝐶
+𝑓𝑟𝑎𝑔
+ +
+ 1
+ −
+ 𝛼
+ 𝐶
+𝑐𝑜𝑙𝑜𝑟
+𝑏𝑢𝑓𝑓𝑒𝑟
+5/10/2024 16
+
+--- PAGE 17 ---
+Internal OpenGL Color Format
+•
+ Each
+ color
+ component
+ represented
+ using
+ 32
+-
+bit
+ floating
+-
+point
+ value
+•
+ Values normalized 
+to range [0.0, 1.0
+] before writing to color 
+buffer
+•
+ Programmers
+ can
+ also
+ use
+ floating
+-
+point
+ RGBA
+ formats
+in
+ texture
+ maps
+•
+ Many, many different formats available
+5/10/2024 17
+
+--- PAGE 18 ---
+Double Buffered Frame Buffers
+5/10/2024 18
+OpenGL 
+Context
+Color Data
+ Front Color Buffer
+Back Color Buffer
+Video
+Device
+
+--- PAGE 19 ---
+OpenGL Programming in a Nutshell
+•
+ Create
+ shader
+ programs
+•
+ Create
+ buffer
+ objects
+ and
+ load
+ data
+ into
+ them
+•
+ Connect
+ data
+ in
+ buffer
+ objects
+ with
+ shader
+ variables
+•
+ Render
+5/10/2024 19
+
+--- PAGE 20 ---
+Object View of OpenGL Pipe
+5/10/2024 20
+Vertex 
+Shader
+Primitive
+Assembly
+ Rasterizer
+ Per
+-
+Fragment
+Operations
+Vertex Index
+Stream
+Assembled
+Points, Lines
+& Triangles
+ Pixel Location Stream
+Vertex Buffer/Array/
+Element
+ Objects
+Pretransformed
+Vertices
+T
+ransformed
+Vertices
+Fragment
+Shader
+Rasterized
+Pretransformed
+Fragments
+T
+ransformed
+Fragments
+Pixel
+Updates
+Frame
+Buffer
+Texture 
+Objects
+Program
+Objects
+OpenGL API / CPU / GPU
+Program
+Objects
+
+--- PAGE 21 ---
+What is an OpenGL 
+Object
+? (1/2)
+•
+ E
+ncapsulation
+ of
+ related
+ OpenGL
+ state
+ in
+ opaque
+ data
+structure
+•
+ Many
+ object
+ types
+•
+ Regular objects: buffer objects, 
+shader
+ objects, program objects, 
+texture objects, sampler objects, …
+•
+ Container objects contain references to other objects: vertex 
+array objects, framebuffer objects, …
+•
+ Each
+ object
+ type
+ corresponds
+ to
+ distinct
+ set
+ of
+ commands
+which
+ manage
+ objects
+ of
+ that
+ type
+•
+ Provides
+ mechanism
+ to
+ encapsulate
+ particular
+ group
+ of
+state
+ and
+ create,
+ modify,
+ query,
+ and
+ destroy
+ many
+ such
+instances
+5/10/2024 21
+
+--- PAGE 22 ---
+What is an OpenGL Object? (2/2)
+•
+ Explicitly
+ switching
+ state
+ for
+ each
+ state
+ variable
+ can
+ be
+inefficient
+ because
+ of
+ high
+ overhead
+ on
+ OpenGL
+ driver
+•
+ Every state change requires validation at draw time which 
+causes slowdown in rendering
+5/10/2024 22
+Why not collect related stage
+changes and persistently store
+them inside OpenGL context?
+Rather than explicitly switching states of many
+v
+ariables, single function call will suffice
+Other advantage, we can reuse collected state changes
+
+--- PAGE 23 ---
+OpenGL API Functions
+•
+ Three
+ types
+ of
+ functions
+•
+ Those that change state
+•
+ Those that return state information
+•
+ Those that specify primitives, programs, textures that flow 
+through 
+pipeline
+5/10/2024 23
+
+--- PAGE 24 ---
+Enabling/Disabling State in OpenGL
+•
+ Set
+ and
+ disable
+ OpenGL
+ state
+ using
+ glEnable
+()
+ and
+glDisable
+()
+:
+•
+ glEnable
+(GL_DEPTH_TEST);
+•
+ glEnable
+(GL_CULL_FACE);
+•
+ glDisable
+(GL_PROGRAM_POINT_SIZE);
+5/10/2024 24
+
+--- PAGE 25 ---
+Query State in OpenGL
+•
+ Test
+ whether
+ state
+ is
+ enabled
+ using
+ glIsEnabled
+()
+and
+glIsEnabledi
+()
+•
+ Query
+ states
+ using
+glGet
+*()
+:
+•
+ Various calls available depending on what to query
+•
+ glGetBooleanv
+(GL_BLEND, &
+blend_flag
+);
+5/10/2024 25
+
+--- PAGE 26 ---
+Object Management:
+Name Spaces
+•
+ Object
+ types
+ are
+ opaque
+ –
+ defined
+ by
+ implementation
+•
+ OpenGL
+ API
+ represents
+ handles
+ to
+ objects
+ using
+ names
+of
+ type
+ unsigned
+ integers
+•
+ Name
+ zero
+ reserved
+ by
+ GL
+•
+ For some object types, zero used to name default object
+•
+ For other object types, zero will never correspond to actual 
+instance of that object type
+5/10/2024 26
+
+--- PAGE 27 ---
+Object Management:
+Name Generation
+•
+ Objects’
+ named
+ by
+ generating
+ unused
+ names
+ using
+functions
+ starting
+ with
+ glGen
+*()
+ followed
+ by
+ object
+type
+•
+ For example, 
+glGenBuffers
+()
+ returns one or more 
+previously unused buffer object names
+5/10/2024 27
+
+--- PAGE 28 ---
+Object Management:
+Object Creation (1/2)
+•
+ Generated
+ names
+ don’t
+ initially
+ correspond
+ to
+ an
+ object
+instance
+ –
+ no
+ resources
+ allocated
+ yet
+•
+ Objects
+ (with
+ generated
+ names)
+ created
+ by
+ binding
+generated
+ name
+ to
+ context
+ using
+glBindBuffer
+()
+•
+ Binding allocates resources for object and its state
+•
+ For
+ example
+:
+•
+ Name of buffer object generated by 
+glGenBuffers
+()
+•
+ Buffer object created by calling 
+glBindBuffer
+()
+ with 
+name returned by 
+glGenBuffers
+()
+5/10/2024 28
+
+--- PAGE 29 ---
+Object Management:
+Object Creation (2/2)
+•
+ Objects
+ also
+ created
+ directly
+ by
+ functions
+ that
+ return
+new
+ name
+ or
+ names
+ representing
+ freshly
+ initialized
+object
+•
+ Some
+ functions
+ return
+ single
+ object
+ name
+ directly
+•
+ For example 
+glCreateProgram
+()
+ for program objects
+•
+ Some
+ functions
+ able
+ to
+ create
+ large
+ number
+ of
+ new
+objects,
+ returning
+ their
+ names
+ in
+ array
+•
+ Examples are 
+glCreateBuffers
+()
+ for buffers, 
+glCreateTextures
+()
+ for textures, and 
+glCreateVertexArrays
+()
+ for vertex arrays
+5/10/2024 29
+
+--- PAGE 30 ---
+Object Management:
+Object Instances
+•
+ Can
+ instantiate
+ many
+ objects
+ of
+ same
+ type
+•
+ Particular
+ instance
+ can
+ made
+ active
+ using
+glBindBuffers
+()
+•
+ Allows state encapsulated by instance to be mapped to 
+OpenGL context
+•
+ Means functions operating on bound object will now affect 
+OpenGL context
+5/10/2024 30
+
+--- PAGE 31 ---
+Object Management:
+Name 
+Delection
+ and Object Deletion
+•
+ Objects
+ deleted
+ by
+ calling
+ deletion
+ functions
+ specific
+ to
+that
+ object
+ type
+•
+ For example, 
+glDeleteBuffers
+ is passed array of buffer 
+object names to delete
+•
+ After
+ object
+ is
+ deleted,
+ it
+ has
+ no
+ contents
+•
+ Object’s
+ name
+ is
+ once
+ again
+ marked
+ unused
+ for
+purpose
+ of
+ name
+ generation
+5/10/2024 31
+
+--- PAGE 32 ---
+Object Management:
+What are Buffer Objects?
+•
+ Since
+ cost
+ of
+ communication
+ more
+ expensive
+ than
+ cost
+of
+ computation,
+ data
+ transfer
+ in
+ GL
+ happens
+ through
+buffer
+ objects
+•
+ Chunks
+ of
+ server
+ memory
+ managed
+ by
+ server
+•
+ Populated
+ with
+ data
+ that
+ will
+ be
+ consumed
+ by
+ server
+•
+ Stores information about vertices, indices, adjacency 
+information, and user
+-
+defined 
+data
+5/10/2024 32
+
+--- PAGE 33 ---
+Life
+-
+Cycle of Buffer Objects
+•
+ Generate
+ named
+ buffer
+ objects
+•
+ Bind
+ buffer
+ object
+•
+ If buffer object doesn’t exist, create it
+•
+ If buffer object exists, then make buffer object current or 
+active
+•
+ Perform
+ data
+ transfer
+ to/from
+ buffer
+•
+ Use
+ buffer
+ to
+ draw
+•
+ Delete
+ buffer
+ object
+ when
+ no
+ longer
+ required
+•
+ Failure 
+to do so will leave 
+memory 
+leak 
+in GL implementation
+5/10/2024 33
+
+--- PAGE 34 ---
+Handles to Buffer Objects
+•
+ Client
+ code
+ cannot
+ directly
+ access
+ GL’s
+ server
+-
+side
+memory
+•
+ Indirect
+ references
+•
+ Pointers are 
+useless
+•
+ Integers are used as indices into 
+server
+-
+side memory pool
+5/10/2024 34
+
+--- PAGE 35 ---
+Comparison to
+C++ Resource 
+Managment
+OpenGL
+GLuint
+ buffers[4]; // handle
+glGenBuffers
+(4
+, buffers);
+glBindBuffer
+(GL_ARRAY_BUFFER, buffers[0
+]);
+glBindBuffer
+(GL_TEXTURE_BUFFER, buffers[1
+]);
+5/10/2024 35
+C++ 
+void **buffers;
+buffers 
+= new (void*)[4];
+buffers[0
+] = (Array*) 
+new Array
+();
+buffers[1
+] = (Texture*) 
+new Texture
+();
+
+--- PAGE 36 ---
+What is Binding?
+•
+ Binding
+ specifies
+ type
+ of
+ data
+ that
+ will
+ be
+ written
+ to/read
+from
+ specific
+ buffer
+ object
+•
+glBindBuffer
+(
+ GLenum
+ target,
+ GLuint
+ buffer
+ )
+•
+target
+: a valid “buffer type” as specified by 
+GL 
+-
+ 14 
+types in 
+version 4.0
+•
+buffer
+: previously generated 
+name 
+for 
+GL 
+buffer 
+object
+5/10/2024 36
+
+--- PAGE 37 ---
+Fill It Up!!!
+•
+ Preceding
+ steps
+ create
+ empty
+ buffer
+ object
+•
+ Data
+ transfer
+•
+ More than one way to do 
+it 
+–
+ most common 
+glBufferData
+()
+ and 
+glBufferSubData
+()
+•
+ Client replaces 
+data partially through 
+larger 
+chunk
+•
+ Server generates 
+data 
+and records 
+it 
+into 
+buffer object
+5/10/2024 37
+
+--- PAGE 38 ---
+Discarding Buffer Data
+•
+ Inform
+ GL
+ server
+ that
+ data
+ is
+ not
+ required
+ anymore
+using
+ glInvalidateBufferData
+()
+ or
+glInvalidateBufferSubData
+()
+5/10/2024 38
+
+--- PAGE 39 ---
+Giving It Up!!!
+•
+ When
+ no
+ longer
+ required,
+ return
+ data
+ store
+ back
+ to
+server
+ memory
+ pool
+ using
+glDeleteBuffers
+()
+5/10/2024 39
+
+--- PAGE 40 ---
+OpenGL Geometric 
+Primitives (1/2)
+•
+ GL
+ provides
+ mechanisms
+ to
+ describe
+ how
+ complex
+geometric
+ objects
+ are
+ to
+ be
+ rendered
+•
+ Doesn’t
+ provide
+ mechanisms
+ to
+ describe
+ the
+ complex
+objects
+ themselves
+5/10/2024 40
+
+--- PAGE 41 ---
+OpenGL Geometric 
+Primitives (2/2)
+5/10/2024 41
+GL_POINTS
+ GL_LINES
+GL_LINE_STRIP
+ GL_LINE_LOOP
+ GL_TRIANGLES
+ GL_TRIANGLE_STRIP
+GL_TRIANGLE_FAN
+ GL_POLYGON
+GL_QUAD_STRIP
+GL_QUADS
+
+--- PAGE 42 ---
+OpenGL Data Types
+5/10/2024 42
+Source: 
+OpenGL 4.6 API Specification
+Types in table to right must be prefixed
+with 
+GL
+ as in 
+GLboolean
+
+--- PAGE 43 ---
+OpenGL Constants
+•
+ Many,
+ many
+ constants
+ prefixed
+ with
+ GL_
+•
+ GL_POINTS
+, 
+GL_LINES
+, 
+GL_TRIANGLE
+, …
+5/10/2024 43
+
+--- PAGE 44 ---
+OpenGL Function Syntax
+•
+ Spec
+ describes
+ GL
+ functions
+ using
+ ANSI
+ C
+ syntax
+•
+ Some
+ functions
+ such
+ as
+ glViewport
+ have
+straightforward
+ functionality
+•
+ Not
+ so
+ much
+ with
+ other
+ functions
+ such
+ as
+ glUniform
+*
+or
+glGet
+*
+•
+ Various group of functions perform same operation but differ 
+in how arguments are supplied to them
+•
+ This variation accommodated using specific notation for 
+describing functions and their arguments
+5/10/2024 44
+
+--- PAGE 45 ---
+Deciphering OpenGL Function 
+Syntax 
+(1/2)
+rtype
+ Name{
+𝝐
+ 𝟏
+ 𝟐
+|
+𝟑
+|
+𝟒
+}{
+𝝐
+|
+b|s|i|i
+64
+|f|d|ub|us|ui|ui
+64
+}{
+𝝐
+|v}
+([
+args
+,]
+ T
+ arg
+1
+,
+...
+,
+ T
+ argN
+ [,
+args
+])
+;
+•
+ rtype
+ is
+ function’s
+ return
+ type
+•
+ Implementations
+ add
+ prefix
+gl
+ to
+Name
+•
+ Arguments
+ enclosed
+ in
+ brackets
+ (
+[
+args
+,]
+ and
+ [,
+args
+]
+)
+ may
+ or
+ may
+ not
+ be
+present
+•
+ Braces
+ (
+{
+ 𝝐
+ b
+ s
+ i
+ i
+64
+ f
+ d
+ ub
+ us
+ ui
+ ui
+64
+}
+)
+ enclose
+ series
+ of
+ type
+descriptors
+ which
+ are
+ used
+ for
+ specifying
+ corresponding
+ types
+ for
+ parameters
+•
+ 𝝐
+ indicates no type descriptor
+•
+ N
+ arguments
+ arg
+1
+ thro’
+ argN
+ have
+ type
+ T
+ which
+ is
+ associated
+ with
+ type
+descriptor
+•
+ If type descriptor is not used, then 
+T
+ is explicitly 
+given
+5/10/2024 45
+
+--- PAGE 46 ---
+Deciphering OpenGL Function 
+Syntax 
+(2/2)
+rtype
+Name{
+𝝐
+ 𝟏
+ 𝟐
+|
+𝟑
+|
+𝟒
+}{
+𝝐
+|
+b|s|i|i
+64
+|f|d|ub|us|ui|ui
+64
+}{
+𝝐
+|v}
+([
+args
+,]
+ T
+ arg
+1
+,
+...
+,
+ T
+ argN
+ [,
+args
+])
+;
+•
+ If
+ final
+ character
+ is
+ not
+v
+,
+ then
+N
+ is
+ given
+ by
+ digit
+1
+,
+2
+,
+3
+,
+ or
+4
+•
+ 𝝐
+ indicates there is no digit and number of arguments is fixed
+•
+ If
+ final
+ character
+ is
+v
+,
+ then
+ only
+arg
+1
+ is
+ present
+ and
+ it
+ is
+ array
+ of
+N
+values
+ of
+ indicated
+ type
+5/10/2024 46
+
+--- PAGE 47 ---
+OpenGL Function Syntax: 
+Uniform{1234}{if}
+void
+ Uniform{
+1234
+}{if}
+ (
+GLint
+ location,
+ T
+ value)
+indicates
+ eight
+ declarations
+:
+void
+ glUniform
+1
+i(
+GLint
+ location,
+ GLint
+ value)
+;
+void
+ glUniform
+1
+f(
+GLint
+ location,
+ GLfloat
+ value)
+;
+void
+ glUniform
+2
+i(
+GLint
+ location,
+ GLint
+ v
+0
+,
+ GLint
+ v
+1
+)
+;
+void
+ glUniform
+2
+f(
+GLint
+ location,
+ GLfloat
+ v
+0
+,
+ GLfloat
+ v
+1
+)
+;
+void
+ glUniform
+3
+i(
+GLint
+ location,
+ GLint
+ v
+0
+,
+ GLint
+ v
+1
+,
+ GLint
+ v
+2
+)
+;
+void
+ glUniform
+3
+f(
+GLint
+ location,
+ GLfloat
+ v
+0
+,
+ GLfloat
+ v
+1
+,
+ GLfloat
+ v
+2
+)
+;
+void
+ glUniform
+4
+i(
+GLint
+ loc
+,
+ GLint
+ v
+0
+,
+ GLint
+ v
+1
+,
+ GLint
+ v
+2
+,
+ GLint
+ v
+3
+)
+;
+void
+ glUniform
+4
+f(
+GLint
+ loc
+,
+ GLfloat
+ v
+0
+,
+ GLfloat
+ v
+1
+,
+ GLfloat
+ v
+2
+,
+ GLfloat
+ v
+3
+)
+;
+5/10/2024 47
+
+--- PAGE 48 ---
+OpenGL Function Syntax: 
+Uniform{1234}{if
+} {v}
+void
+ Uniform{
+1234
+}{if}
+ (
+GLint
+ location,
+ T
+ value)
+indicates
+ eight
+ declarations
+:
+void
+ glUniform
+1
+fv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLfloat
+ *
+ value)
+;
+void
+ glUniform
+2
+fv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLfloat
+ *
+ value)
+;
+void
+ glUniform
+3
+fv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLfloat
+ *
+ value)
+;
+void
+ glUniform
+4
+fv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLfloat
+ *
+ value)
+;
+void
+ glUniform
+1
+iv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLint
+ *
+ value)
+;
+void
+ glUniform
+2
+iv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLint
+ *
+ value)
+;
+void
+ glUniform
+3
+iv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLint
+ *
+ value)
+;
+void
+ glUniform
+4
+iv(
+GLint
+ location,
+ GLsizei
+ count,
+ const
+ GLint
+ *
+ value)
+;
+5/10/2024 48
+
+--- PAGE 49 ---
+Why Shaders?
+5/10/2024 49
+Programmable 
+graphics 
+hardware
+Tremendous 
+growth in 
+computing power
+Programmer’s 
+desire to implement 
+state
+-
+of
+-
+art 
+rendering 
+techniques
+ Human desire for 
+visual simulation 
+and entertainment
+Shaders
+
+--- PAGE 50 ---
+Data Flow in Graphics Pipe
+5/10/2024 50
+OpenGL Commands
+GPU Commands
+& Data Stream
+3D Game
+OpenGL
+Vertex
+Puller
+Primitive
+Assembly
+Rasterization &
+Interpolation
+Per
+-
+Fragment
+Operations
+Frame
+Buffer
+Vertex Index
+Stream
+Assembled
+Points, Lines
+& Triangles
+Pixel Location
+Stream
+Pixel
+Updates
+Vertex 
+Shader
+Pretransformed
+Vertices
+T
+ransformed
+Vertices
+ Fragment
+Shader
+Rasterized
+Pretransformed
+Fragments
+T
+ransformed
+Fragments
+CPU
+-
+GPU Boundary
+
+--- PAGE 51 ---
+What is a Shader
+? (1/2)
+•
+ Shading
+ is
+ process
+ of
+ using
+ equation
+ to
+ compute
+ color
+(at
+ surface
+ point
+ or
+ pixel)
+ based
+ on
+ light
+ sources
+ and
+surface’s
+ material
+ properties
+5/10/2024 51
+Shading
+(at surface point)
+Textures
+Material
+Properties
+Light Sources
+Shaded
+point
+
+--- PAGE 52 ---
+What is a Shader? (2/2)
+•
+ Shader
+ is
+ particular
+implementation
+ of
+shading
+ process
+•
+ Now,
+ shader
+ represents
+any
+ programmer
+-
+defined
+operations
+ executed
+ by
+any
+ GPU
+ programmable
+stage
+5/10/2024 52
+Reference
+
+
+--- PAGE 53 ---
+Shader
+ Environment
+•
+ Shaders
+ are
+ programmed
+ individually
+ and
+ stored
+ as
+external
+ source
+ files
+•
+ OpenGL
+-
+based
+ graphics
+ application
+ now
+ behaves
+ as
+host
+ application
+ to
+ manage
+ shaders
+ and
+ their
+ resources
+5/10/2024 53
+
+--- PAGE 54 ---
+Vertex 
+Shader
+: Model
+-
+to
+-
+Clip 
+Xform
+5/10/2024 54
+static
+ GLchar
+ const
+*
+ vertex_shader_source
+[]
+ =
+ {
+"#
+version
+ 450
+ core
+ \
+n"
+"
+ \
+n"
+"
+layout
+ (location=
+0
+)
+ in
+ vec
+3
+ vVertexPosition
+;
+ \
+n"
+"
+layout
+ (location=
+1
+)
+ in
+ vec
+3
+ vVertexColor
+;
+ \
+n"
+"
+ \
+n"
+"
+smooth
+ out
+ vec
+3
+ vSmoothColor
+;
+ \
+n"
+"
+ \
+n"
+"
+uniform
+ mat
+4
+ uMVP
+;
+ \
+n"
+"
+ \
+n"
+"
+void
+ main
+ ()
+ {
+ \
+n"
+"
+ gl_Position
+ =
+ uMVP
+ *
+ vec
+4
+(
+vVertexPosition
+,
+ 1
+.
+f)
+;
+ \
+n"
+"
+ vSmoothColor
+ =
+ vVertexColor
+;
+ \
+n"
+"}
+ \
+n"
+}
+;
+
+--- PAGE 55 ---
+Vertex 
+Shader
+ Source in File
+5/10/2024 55
+#version
+ 450
+layout
+ (location=
+0
+)
+ in
+ vec
+3
+ vVertexPosition
+;
+layout
+ (location=
+1
+)
+ in
+ vec
+3
+ vVertexColor
+;
+out
+ vec
+3
+ vSmoothColor
+;
+uniform
+ mat
+4
+ uMVP
+;
+void
+ main()
+ {
+vSmoothColor
+ =
+ vVertexColor
+;
+gl_Position
+ =
+ uMVP
+ *
+ vec
+4
+(
+vVertexPosition
+,
+ 1
+.
+f)
+;
+}
+
+--- PAGE 56 ---
+Fragment Shader: Write Through (
+Ver
+ 1)
+5/10/2024 56
+static
+ GLchar
+ const
+*
+ fragment_shader_source
+[]
+ =
+ {
+"#
+version
+ 450
+ core
+ \
+n"
+"
+ \
+n"
+"
+in
+ vec
+3
+ vSmoothColor
+;
+ \
+n“
+"out
+ vec
+4
+ fFragColor
+;
+ \
+n
+"
+"
+ \
+n"
+"
+void
+ main
+ ()
+ {
+ \
+n"
+"
+ f
+FragColor
+ =
+ vec
+4
+(
+vSmoothColor
+,
+ 1
+.
+f)
+;
+ \
+n"
+"}
+ \
+n"
+}
+;
+
+--- PAGE 57 ---
+Fragment Shader: Write Through (
+Ver
+ 2)
+5/10/2024 57
+static
+ GLchar
+ const
+*
+ fragment_shader_source
+[]
+ =
+ {
+"#
+version
+ 450
+ core
+ \
+n"
+"
+ \
+n"
+"
+in
+ vec
+3
+ vSmoothColor
+;
+ \
+n"
+"
+ \
+n"
+"
+void
+ main
+ ()
+ {
+ \
+n"
+"
+ gl_FragColor
+ =
+ vec
+4
+(
+vSmoothColor
+,
+ 1
+.
+f)
+;
+ \
+n"
+"}
+ \
+n"
+}
+;
+
+--- PAGE 58 ---
+Fragment 
+Shader
+ Source in File
+5/10/2024 58
+#version
+ 450
+in
+ vec
+3
+ vSmoothColor
+;
+void
+ main()
+ {
+gl_FragColor
+ =
+ vec
+4
+(
+vSmoothColor
+,
+ 1
+.
+f)
+;
+}
+
+--- PAGE 59 ---
+GLSL Production 
+Pipeline (1/2)
+•
+ How
+ to
+ compile
+ shader
+ and
+ pass
+ compiled
+ shader
+ to
+GPU
+ for
+ execution?
+•
+ OpenGL API is used to compile, link, execute and debug 
+shaders
+•
+ OpenGL 4.1 added ability to save compiled 
+shader
+ programs 
+to 
+file to avoid runtime overhead of 
+shader
+ compilation
+5/10/2024 59
+
+--- PAGE 60 ---
+GLSL Production 
+Pipeline (2/2)
+5/10/2024 60
+GLSL 
+Compiler
+GLSL Source 
+Code
+GLSL 
+Compiled 
+Code
+GLSL Linker
+Assembly 
+Code
+Assembler
+ GPU 
+Hardware
+Application
+OpenGL Driver
+OpenGL
+GPU Vendor
+Legend
+
+--- PAGE 61 ---
+OpenGL 
+Shader
+ Processing Commands
+5/10/2024 61
+Shader
+Object
+Shader
+ Executable
+Shader
+Program
+Shader
+Source
+glCompileShader
+Character 
+Strings
+glShaderSource
+glAttachShader
+glCreateShader
+glLinkProgram
+glUseProgram
+Shader
+Object
+glCreateProgram
+Shader
+Object
+
+--- PAGE 62 ---
+GLSL Production Pipeline
+5/10/2024 62
+Shader
+Object
+Shader
+Program
+Shader
+Source
+ glCompileShader
+()
+Character 
+Strings
+ glShaderSource
+()
+glAttachShader
+()
+glCreateShader
+()
+glLinkProgram
+()
+glUseProgram
+()
+Shader
+Object
+glCreateProgram
+()
+ Executable 
+Shader
+ Program
+1
+2
+3
+4
+5
+ 6
+7

@@ -35,7 +35,7 @@ inline void textureSettings(const Texture& texture, bool linear, bool repeat)
 inline void createTexturedQuad(Mesh& mesh)
 {
     // TODO A4.3: four white vertices with position and UV, six indices; use A1 createMesh.
-    // Bottom vertices have v=1, top vertices v=0 to match the provided PPM loader.
+    // Bottom vertices have v=1, top vertices v=0 to match the provided PNG loader.
 
     if (!mesh.vao) return;
 
@@ -49,39 +49,35 @@ struct UvRect
     Vec2 scale{1, 1};
 };
 
-inline UvRect atlasRect(int frame, int columns, int rows, int width, int height)
+// Provided: keep LINEAR sampling inside a single atlas tile.
+inline UvRect insetTile(UvRect uv, int width, int height)
 {
-    // TODO A4.5: row-major frame -> UV rectangle; inset half a texel to avoid adjacent-tile bleeding.
-    return {}; // Whole atlas until frame selection is implemented.
+    uv.offset.x += .5f / width;
+    uv.offset.y += .5f / height;
+    uv.scale.x -= 1.0f / width;
+    uv.scale.y -= 1.0f / height;
+    return uv;
 }
 
-struct Animation
+inline UvRect atlasRect(int tile, int columns, int rows, int width, int height)
 {
-    int frame = 0;
-    int count = 8;
-    float elapsed = 0;
-    float interval = .15f;
-    bool playing = true;
-};
-
-inline void updateAnimation(Animation& a, float dt)
-{
-    // TODO A4.6: retain fractional time and handle multiple frames in one update.
-    // Use a while loop rather than resetting elapsed to zero.
+    // TODO A4.5: tile number -> row/column -> UV offset and scale.
+    // Return insetTile(uv, width, height) after computing the tile rectangle.
+    return {}; // Whole atlas until tile selection is implemented.
 }
 
 struct Sprite
 {
     Object object;
     const Texture* texture = nullptr;
-    Animation animation;
+    int tile = 0;
 };
 
 inline void drawSprite(const Sprite& sprite, GLuint program, UvRect uv)
 {
     if (!sprite.texture || !sprite.texture->id) return;
 
-    // TODO A4.7: bind texture to unit 0, connect sampler, upload textured mode and UV rect.
+    // TODO A4.6: bind texture to unit 0, connect sampler, upload textured mode and UV rect.
     // Reuse drawObject for model upload and indexed drawing.
 
     drawObject(sprite.object, program);

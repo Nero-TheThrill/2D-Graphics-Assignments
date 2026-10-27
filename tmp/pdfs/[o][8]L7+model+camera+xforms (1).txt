@@ -1,0 +1,3172 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+Model and Camera
+Transformations
+Prasanna Ghali
+
+--- PAGE 2 ---
+2
+D Graphics Pipe: Coordinate Systems
+•6/2/2024 •2
+•
+ Model
+ coordinate
+ system
+ –
+ each
+ model
+ has
+ its
+ own
+ coordinate
+ system
+•
+ World
+ coordinate
+ system
+ –
+ instances
+ of
+ models
+ called
+ objects
+ are
+placed
+ into
+ common
+ coordinate
+ system
+•
+ Camera
+ coordinate
+ system
+ –
+ camera
+-
+centric
+ coordinate
+ system
+ to
+generate
+ image
+ from
+ point
+ of
+ view
+ of
+ camera
+•
+ NDC
+ –
+ standard
+ square
+ is
+ axis
+-
+aligned
+ square
+ with
+ sides
+ of
+ length
+ 2
+,
+centered
+ at
+ origin
+Model Transformation
+Model 
+Coordinates
+Application/World 
+Coordinates
+View 
+Coordinates
+Screen/Device/
+Window/Pixel
+Coordinates
+From
+Modeling
+Software
+ View/Camera/
+Eye Transformation
+NDC
+To
+Frame
+Buffer
+𝑥
+𝑚
+,
+ 𝑦
+𝑚
+ 𝑥
+𝑤
+,
+ 𝑦
+𝑤
+𝑥
+𝑣
+,
+ 𝑦
+𝑣
+𝑥
+𝑛
+,
+ 𝑦
+𝑛
+𝑥
+𝑑
+,
+ 𝑦
+𝑑
+Viewport
+Transformation
+Camera window to NDC
+Transformation
+
+--- PAGE 3 ---
+Model Transformations (1/4)
+•
+ Model
+ described
+ in
+ model
+ system
+ by
+ triangular
+ mesh
+•
+ Most
+ common
+ and
+ simplest
+ is
+ for
+ model
+ system
+ to
+ coincide
+with
+ world
+ system
+•6/2/2024 •3
+
+
+--- PAGE 4 ---
+Model Transformations (2/4)
+•
+ To
+ create
+ scene
+ in
+ world
+ system,
+ we
+ instantiate
+ one
+ or
+ more
+objects
+ from
+ each
+ model
+ [that
+ is
+ defined
+ in
+ its
+ model
+ system]
+•
+ T
+ransformation
+ matrix
+ is
+ necessary
+ to
+ appropriately
+ size,
+ orient,
+ and
+position
+ an
+ instance
+ of
+ model
+ in
+ world
+ system
+•
+ This
+ process
+ is
+ called
+ model
+,
+ or
+ model
+-
+to
+-
+object
+,
+ or
+ model
+-
+to
+-
+world
+,
+world
+,
+ or
+ object
+ transformations
+•6/2/2024 •4
+
+
+--- PAGE 5 ---
+Model Transformations (3/4)
+•
+ Model
+ specifies
+ geometrical
+ attributes
+ in
+ model
+ system
+•
+ Object
+ is
+ single
+ instantiation
+ of
+ model
+ in
+ world
+ system
+•
+ We
+ can
+ have
+ many
+ objects
+ instantiated
+ from
+ a
+ model
+•6/2/2024 •5
+
+
+--- PAGE 6 ---
+Model Transformations (4/4)
+•
+ This
+ transformation
+ is
+ applied
+ only
+ to
+ position
+coordinates
+ of
+ mesh
+ vertices
+•
+ For
+ real
+-
+time
+ lighting,
+ normals
+ require
+ transformation
+•
+ Everything
+ else
+ including
+ texture
+ coordinates,
+ and
+topology
+ information
+ are
+ unaffected
+•6/2/2024 •6
+𝑂
+ 𝑋
+𝑚
+𝑌
+𝑚
+𝑂
+ 𝑋
+𝑤
+𝑌
+𝑤
+M
+𝑀
+
+
+--- PAGE 7 ---
+SRT Technique
+•
+ Most
+ common
+ strategy
+ for
+ constructing
+ model
+transforms
+ is
+ Scale
+-
+Rotate
+-
+Translate
+ (SRT)
+ method
+•
+ Strategy
+ has
+ 3
+ or
+ 4
+ steps
+1)
+ Translate
+ model
+ to
+ origin
+ [of
+ model
+ system]
+•
+ Hopefully
+ never
+ necessary
+ if
+ model
+ and
+ world
+ systems
+ coincide
+2)
+ Scale
+ to
+ target
+ size
+3)
+ Rotate
+ to
+ target
+ orientation
+4)
+ Translate
+ to
+ target
+ location
+•6/2/2024 •7
+
+--- PAGE 8 ---
+SRT Technique: Example
+•
+ Compute
+ transformation
+ matrix
+ that
+ maps
+ standard
+square
+ −
+1
+,
+1
+ ×
+ −
+1
+,
+1
+ to
+ rectangle
+ with
+ width
+ 20
+,
+height
+ 16
+,
+ rotated
+ by
+ 30
+°
+,
+ and
+ centered
+ at
+ (
+5
+,
+ 12
+)
+•6/2/2024 •8
+T
+ 5
+,
+12
+ ∘
+ R
+30
+°
+ ∘
+ H
+ Τ
+20
+ 2
+,
+ Τ
+16
+ 2
+ =
+ T
+ 5
+,
+12
+ ∘
+ R
+30
+°
+ ∘
+ H
+ 10
+,
+8
+=
+Τ
+3
+ 2
+ −
+ Τ
+1
+ 2
+ 5
+Τ
+1
+ 2
+ Τ
+3
+ 2
+ 12
+0
+ 0
+ 1
+1
+0
+ 0
+ 0
+0
+ 8
+ 0
+0
+ 0
+ 1
+=
+5
+ 3
+ −
+4
+ 5
+5
+ 4
+ 3
+ 12
+0
+ 0
+ 1
+
+--- PAGE 9 ---
+2D Camera Specs (1/2)
+•6/2/2024 •9
+•
+ Camera
+ is
+ modeled
+ as
+oriented
+ rectangle
+ in
+ world
+•
+ Think
+ of
+ rectangle
+ as
+ “window
+to
+ world”
+•
+ Camera
+ specs
+•
+ Center
+ of
+ window
+ 𝐶
+𝑤
+ =
+ 𝐶
+ Ƹ
+𝑖
+,
+ 𝐶
+ Ƹ
+𝑗
+•
+ Orientation
+ defined
+ by
+ right
+vector
+ ො
+𝑢
+ and
+ up
+ vector
+ ො
+𝑣
+•
+ Window’s
+ width
+ 𝑊
+ and
+ height
+ 𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+
+
+--- PAGE 10 ---
+2D 
+Camera 
+Specs (2/2
+)
+•6/2/2024 •10
+•
+ Orientation
+ vectors
+ ො
+𝑢
+ and
+ ො
+𝑣
+•
+ Unit
+ length
+:
+ ො
+𝑢
+ =
+ ො
+𝑣
+ =
+ 1
+•
+ Orthogonal
+:
+ ො
+𝑢
+ ∙
+ ො
+𝑣
+ =
+ 0
+•
+ Form
+ right
+-
+handed
+ coordinate
+system
+:
+𝑢
+ Ƹ
+𝑖
+ 𝑣
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ 𝑣
+ Ƹ
+𝑗
+ >
+ 0
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+
+
+--- PAGE 11 ---
+Camera Motion
+•
+ Camera
+ and
+ its
+ specs
+ “live”
+ in
+ world
+coordinate
+ system
+•
+ Moving
+ camera
+ in
+ world
+:
+•
+ Translation
+:
+ 𝐶
+𝑤
+ ⟵
+ 𝐶
+𝑤
+ +
+ Ԧ
+𝑡
+•
+ Rotation
+:
+ ො
+𝑢
+ ←
+ R
+𝜃
+°
+ Ƹ
+𝑖
+,
+ ො
+𝑣
+ ←
+ R
+𝜃
+°
+ Ƹ
+𝑗
+•
+ Must
+ implement
+ absolute
+ rotation
+ by
+ keeping
+track
+ of
+ angular
+ displacement
+ 𝜃
+°
+•
+ Zoom
+:
+ 𝑊
+ ←
+ 𝛽𝑊
+,
+ 𝐻
+ ←
+ 𝛽𝐻
+•6/2/2024 •11
+
+
+--- PAGE 12 ---
+Camera (or View) Coordinate System 
+(1/2)
+•
+ I
+mage
+ displayed
+ to
+ viewport
+ is
+ portion
+ of
+ scene
+ viewed
+ from
+ perspective
+ of
+camera
+ that
+ is
+ in
+ the
+ interior
+ of
+ “window”
+ of
+ camera
+•
+ This
+ portion
+ of
+ scene
+ is
+ easier
+ to
+ define
+ if
+ oriented
+ camera
+ “window”
+ in
+world
+ system
+ is
+ transformed
+ into
+ axis
+-
+aligned
+ box
+ in
+ camera
+ [also
+ known
+as
+ view
+]
+ system
+•
+ Things
+ inside
+ “window”
+ are
+ rendered
+;
+ those
+ outside
+ “window”
+ will
+ be
+ culled,
+ clipped,
+and
+ scissored
+ out
+•6/2/2024 •12
+
+
+--- PAGE 13 ---
+Camera (or View) Coordinate System 
+(2/2)
+•
+ Canonical
+ camera
+ location
+ and
+ orientation
+ [in
+ camera
+system]
+:
+•
+ Center
+ of
+ “window”
+ is
+ origin
+:
+ 𝐶
+𝑣
+ =
+ 0
+,
+ 0
+ ←
+ 𝐶
+𝑤
+ =
+ 𝐶
+ Ƹ
+𝑖
+,
+ 𝐶
+ Ƹ
+𝑗
+•
+ Orientation
+ vectors
+ ො
+𝑢
+ and
+ ො
+𝑣
+ transformed
+ to
+ view
+ coordinate
+axes
+:
+ ො
+𝑢
+ =
+ 1
+,
+ 0
+ ←
+ ො
+𝑢
+ =
+ 𝑢
+ Ƹ
+𝑖
+,
+ 𝑢
+ Ƹ
+𝑗
+ ,
+ ො
+𝑣
+ =
+ 0
+,
+ 1
+ ←
+ ො
+𝑣
+ =
+ 𝑣
+ Ƹ
+𝑖
+,
+ 𝑣
+ Ƹ
+𝑗
+•6/2/2024 •13
+
+
+--- PAGE 14 ---
+•
+ Transforms
+ objects
+ in
+ world
+ system
+ to
+ camera
+ system
+so
+ that
+ view
+ of
+ scene
+ is
+ defined
+ from
+ camera’s
+ point
+ of
+view
+World
+-
+to
+-
+Camera (or View) 
+Transformation (1/4)
+•6/2/2024 •14
+
+
+--- PAGE 15 ---
+World
+-
+to
+-
+Camera (or View) 
+Transformation (2/4)
+•6/2/2024 •15
+•
+ Transforms
+ everything
+ in
+ world
+ system
+ to
+ coordinate
+system
+ called
+ camera
+ (or
+ view)
+ system
+ such
+ that
+•
+ Camera’s
+ location
+ 𝐶
+𝑤
+ =
+ 𝐶
+ Ƹ
+𝑖
+,
+ 𝐶
+ Ƹ
+𝑗
+ in
+ world
+ system
+ is
+ now
+ origin
+𝐶
+𝑣
+ =
+ 0
+,
+ 0
+•
+ Camera’s
+ orientation
+ vectors
+ ො
+𝑢
+ =
+ 𝑢
+ Ƹ
+𝑖
+,
+ 𝑢
+ Ƹ
+𝑗
+ and
+ ො
+𝑣
+ =
+ 𝑣
+ Ƹ
+𝑖
+,
+ 𝑣
+ Ƹ
+𝑗
+ are
+transformed
+ into
+ ො
+𝑢
+ =
+ 1
+,
+ 0
+ and
+ ො
+𝑣
+ =
+ 0
+,
+ 1
+ ,
+ respectively
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑣𝑖𝑒𝑤
+
+--- PAGE 16 ---
+•
+ Simpler
+ to
+ deduce
+ matrix
+ to
+ transform
+ axis
+-
+aligned
+camera
+ window
+ from
+ camera
+ system
+ to
+ oriented
+ camera
+window
+ in
+ world
+ system
+World
+-
+to
+-
+Camera (or View) 
+Transformation 
+(3/4)
+•6/2/2024 •16
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑐𝑎𝑚
+ =
+ M
+𝑣𝑖𝑒𝑤
+−
+1
+
+--- PAGE 17 ---
+•
+ Camera
+-
+to
+-
+world
+ transformation
+ transforms
+ axis
+-
+aligned
+camera
+ window
+ from
+ camera
+ system
+ to
+ oriented
+ camera
+window
+ in
+ world
+ system
+Camera
+-
+to
+-
+World Transformation
+•6/2/2024 •17
+M
+𝑐𝑎𝑚
+ =
+ M
+𝑣𝑖𝑒𝑤
+−
+1
+ =
+𝑢
+ Ƹ
+𝑖
+ 𝑣
+ Ƹ
+𝑖
+ 𝐶
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ 𝑣
+ Ƹ
+𝑗
+ 𝐶
+ Ƹ
+𝑗
+0
+ 0
+ 1
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑐𝑎𝑚
+ =
+ M
+𝑣𝑖𝑒𝑤
+−
+1
+
+--- PAGE 18 ---
+World
+-
+to
+-
+Camera (or View)
+Transformation (4/4)
+•6/2/2024 •18
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑐𝑎𝑚
+−
+1
+ =
+ M
+𝑣𝑖𝑒𝑤
+M
+𝑐𝑎𝑚
+ =
+ M
+𝑣𝑖𝑒𝑤
+−
+1
+ =
+𝑢
+ Ƹ
+𝑖
+ 𝑣
+ Ƹ
+𝑖
+ 𝐶
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ 𝑣
+ Ƹ
+𝑗
+ 𝐶
+ Ƹ
+𝑗
+0
+ 0
+ 1
+M
+𝑣𝑖𝑒𝑤
+ =
+ M
+𝑐𝑎𝑚
+−
+1
+ =
+𝑢
+ Ƹ
+𝑖
+ 𝑣
+ Ƹ
+𝑖
+ 𝐶
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ 𝑣
+ Ƹ
+𝑗
+ 𝐶
+ Ƹ
+𝑗
+0
+ 0
+ 1
+−
+1
+=
+𝑢
+ Ƹ
+𝑖
+ 𝑢
+ Ƹ
+𝑗
+ −
+ ො
+𝑢
+ ∙
+ 𝐶
+𝑣
+ Ƹ
+𝑖
+ 𝑣
+ Ƹ
+𝑗
+ −
+ ො
+𝑣
+ ∙
+ 𝐶
+0
+ 0
+ 1
+
+--- PAGE 19 ---
+Inverse of Affine Transformation (1/2)
+•6/2/2024 •19
+•
+ Recall
+ formula
+ for
+ inverse
+ of
+ 2
+ ×
+ 2
+ non
+-
+singular
+ matrix
+:
+𝑎
+ 𝑏
+𝑐
+ 𝑑
+−
+1
+=
+ 1
+𝑎𝑑
+ −
+ 𝑏𝑐
+𝑑
+ −
+𝑏
+−
+𝑐
+ 𝑎
+ ,
+ 𝑎𝑑
+ −
+ 𝑏𝑐
+ ≠
+ 0
+•
+ Inverse
+ of
+ a
+ composition
+ is
+ A
+ ∘
+ B
+ −
+1
+ =
+ B
+−
+1
+ ∘
+ A
+−
+1
+
+--- PAGE 20 ---
+Inverse of Affine Transformation (2/2)
+•6/2/2024 •20
+•
+ Inverse
+ of
+ 3
+ ×
+ 3
+ affine
+ transformation
+ matrix
+ A
+ =
+ T
+𝑣
+ ∘
+ L
+is
+:
+A
+−
+1
+ =
+ T
+𝑣
+ ∘
+ L
+ −
+1
+⟹
+ A
+−
+1
+ =
+ L
+−
+1
+ ∘
+ T
+𝑣
+−
+1
+⟹
+ A
+−
+1
+ =
+ L
+−
+1
+ ∘
+ T
+−
+𝑣
+
+--- PAGE 21 ---
+Inverse of Affine Transformation: 
+Example
+•
+ Given
+ A
+ =
+5
+ 1
+ −
+3
+8
+ 2
+ 6
+0
+ 0
+ 1
+,
+ compute
+ A
+−
+1
+A
+ =
+ T
+𝑣
+ ∘
+ L
+ =
+5
+ 1
+ −
+3
+8
+ 2
+ 6
+0
+ 0
+ 1
+⟹
+ L
+ =
+ 5
+ 1
+8
+ 2
+ ,
+ Ԧ
+𝑣
+ =
+ −
+3
+,
+ 6
+A
+ =
+ T
+𝑣
+ ∘
+ L
+ ⟹
+ A
+−
+1
+ =
+ L
+−
+1
+ ∘
+ T
+−
+𝑣
+L
+−
+1
+ =
+ 1
+5
+ 2
+ −
+ 8
+ 1
+2
+ −
+1
+−
+8
+ 5
+ =
+ 1
+ −
+ Τ
+1
+ 2
+−
+4
+ Τ
+5
+ 2
+A
+−
+1
+ =
+ L
+−
+1
+ ∘
+ T
+−
+𝑣
+ =
+1
+ −
+ Τ
+1
+ 2
+ 0
+−
+4
+ Τ
+5
+ 2
+ 0
+0
+ 0
+ 1
+1
+ 0
+ 3
+0
+ 1
+ −
+6
+0
+ 0
+ 1
+=
+1
+ −
+ Τ
+1
+ 2
+ 6
+−
+4
+ Τ
+5
+ 2
+ −
+27
+0
+ 0
+ 1
+•6/2/2024 •21
+
+--- PAGE 22 ---
+World
+-
+to
+-
+Camera (or View) 
+Transformation: 
+Example (1/3)
+•
+ Given
+ camera’s
+ position
+ 𝐶
+𝑤
+ =
+ 2
+,
+ −
+3
+ and
+ orientation
+ො
+𝑢
+ =
+ 0
+,
+ −
+1
+ ,
+ ො
+𝑣
+ =
+ 1
+,
+ 0
+ ,
+ transform
+ world
+ system
+ points
+𝑃
+0
+𝑤
+ =
+ 3
+,
+ −
+2
+ ,
+𝑃
+1
+𝑤
+ =
+ 2
+,
+ −
+4
+ ,
+ and
+ 𝑃
+2
+𝑤
+ =
+ 3
+,
+ −
+3
+ into
+ points
+in
+ camera
+ (or
+ view)
+ system
+•6/2/2024 •22
+
+--- PAGE 23 ---
+World
+-
+to
+-
+Camera (or View) 
+Transformation: Example (2/3)
+•6/2/2024 •23
+𝐶
+𝑤
+ =
+ 2
+,
+ −
+3
+ ,
+ ො
+𝑢
+ =
+ 0
+,
+ −
+1
+ ,
+ ො
+𝑣
+ =
+ 1
+,
+ 0
+M
+𝑐𝑎𝑚
+ =
+ M
+𝑣𝑖𝑒𝑤
+−
+1
+ =
+ ො
+𝑢
+ ො
+𝑣
+ 𝐶
+ =
+0
+ 1
+ 2
+−
+1
+ 0
+ −
+3
+0
+ 0
+ 1
+=
+1
+ 0
+ 2
+0
+ 1
+ −
+3
+0
+ 0
+ 1
+0
+ 1
+ 0
+−
+1
+ 0
+ 0
+0
+ 0
+ 1
+𝑀
+𝑐𝑎𝑚
+−
+1
+ =
+ M
+𝑣𝑖𝑒𝑤
+ =
+0
+ 1
+ 0
+−
+1
+ 0
+ 0
+0
+ 0
+ 1
+−
+1
+ 1
+ 0
+ 2
+0
+ 1
+ −
+3
+0
+ 0
+ 1
+−
+1
+=
+0
+ −
+1
+ 0
+1
+ 0
+ 0
+0
+ 0
+ 1
+1
+ 0
+ −
+2
+0
+ 1
+ 3
+0
+ 0
+ 1
+=
+0
+ −
+1
+ −
+3
+1
+ 0
+ −
+2
+0
+ 0
+ 1
+
+--- PAGE 24 ---
+World
+-
+to
+-
+Camera (or View) 
+Transformation: Example (3/3)
+•6/2/2024 •24
+𝑃
+0
+𝑣
+ 𝑃
+1
+𝑣
+ 𝑃
+2
+𝑣
+ =
+ M
+𝑣𝑖𝑒𝑤
+ 𝑃
+0
+𝑤
+ 𝑃
+1
+𝑤
+ 𝑃
+2
+𝑤
+=
+0
+ −
+1
+ −
+3
+1
+ 0
+ −
+2
+0
+ 0
+ 1
+3
+ 2
+ 3
+−
+2
+ −
+4
+ −
+3
+1
+ 1
+ 1
+=
+−
+1
+ 1
+ 0
+1
+ 0
+ 1
+1
+ 1
+ 1
+
+--- PAGE 25 ---
+Camera
+-
+to
+-
+NDC Transform (1/3)
+•6/2/2024 •25
+•
+ In
+ OpenGL,
+ to
+ display
+ scene
+ from
+ camera’s
+ point
+ of
+ view,
+ transformation
+from
+ camera
+ (or
+ view)
+ coordinates
+ to
+ NDC
+ is
+ required
+•
+ What
+ does
+ it
+ look
+ like
+ geometrically?
+Model Transformation M𝑀Model 
+Coordinates
+Application/World 
+Coordinates
+View Coordinates
+From Modeling
+Software View/Camera/Eye
+Transformation 
+M𝑣𝑖𝑒𝑤
+Camera window to NDC transformation M𝑁𝐷𝐶
+Viewport Transformation To Framebuffer
+𝑥
+𝑚
+,
+ 𝑦
+𝑚
+ 𝑥
+𝑤
+,
+ 𝑦
+𝑤
+𝑥
+𝑣
+,
+ 𝑦
+𝑣
+𝑥
+𝑛
+,
+ 𝑦
+𝑛
+ 𝑥
+𝑑
+,
+ 𝑦
+𝑑
+Normalized Device
+Coordinates
+Screen/Device/Window/Pixel 
+CoordinatesM𝑣𝑖𝑒𝑤𝑝𝑜𝑟𝑡
+
+--- PAGE 26 ---
+Camera
+-
+to
+-
+NDC 
+Transform 
+(2/3)
+•
+ Must
+ map
+ camera
+ window
+ [which
+ is
+ defined
+ in
+ camera
+system]
+ to
+ standard
+ NDC
+ square
+•
+ In
+ camera
+ system,
+ camera
+ window
+ is
+ axis
+ aligned
+ rectangle
+with
+ width
+ 𝑊
+ and
+ height
+ 𝐻
+ centered
+ at
+ origin
+•
+ Standard
+ NDC
+ square
+ is
+ axis
+ aligned
+ box
+ with
+ width
+ 2
+ and
+height
+ 2
+ centered
+ at
+ origin
+•6/2/2024 •26
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑐𝑎𝑚
+−
+1
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+?
+ ?
+ ?
+M
+𝑣𝑖𝑒𝑤
+
+--- PAGE 27 ---
+Camera
+-
+to
+-
+NDC 
+Transform 
+(4/4)
+M
+𝑁𝐷𝐶
+ =
+ H
+ 2
+𝑊
+,
+2
+𝐻
+=
+Τ
+2
+ 𝑊
+ 0
+ 0
+0
+ Τ
+2
+ 𝐻
+ 0
+0
+ 0
+ 1
+•6/2/2024 •27
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑐𝑎𝑚
+−
+1
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+M
+𝑁𝐷𝐶
+M
+𝑣𝑖𝑒𝑤
+
+--- PAGE 28 ---
+Camera
+-
+to
+-
+NDC Transform: Example
+•6/2/2024 •28
+•
+ If
+ camera
+ window
+ has
+ width
+ 𝑊
+ =
+ 80
+ and
+ height
+ 𝐻
+ =
+ 60
+,
+compute
+ M
+𝑁𝐷𝐶
+M
+𝑁
+𝐷𝐶
+ =
+ H
+ 2
+80
+,
+ 2
+60
+=
+ H
+ 1
+4
+0
+,
+ 1
+3
+0
+=
+Τ
+1
+ 40
+ 0
+ 0
+0
+ Τ
+1
+ 30
+ 0
+0
+ 0
+ 1
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+M
+𝑐𝑎𝑚
+−
+1
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+M
+𝑁𝐷𝐶
+M
+𝑣𝑖𝑒𝑤
+
+--- PAGE 29 ---
+World
+-
+to
+-
+NDC 
+Transform 
+(1/2)
+•
+ Combine
+ world
+-
+to
+-
+camera
+ and
+ camera
+-
+to
+-
+NDC
+transforms
+:
+ M
+𝑁𝐷𝐶
+ ∘
+ M
+𝑣𝑖𝑒𝑤
+•
+ World
+-
+to
+-
+NDC
+ transformation
+ matrix
+ maps
+ oriented
+camera
+ window
+ in
+ world
+ system
+ to
+ standard
+ NDC
+square
+ [in
+ NDC
+ system]
+•6/2/2024 •29
+
+--- PAGE 30 ---
+World
+-
+to
+-
+NDC 
+Transform 
+(2/2)
+•6/2/2024 •30
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+𝑂
+ 𝑋
+𝑚
+𝑌
+𝑚
+𝑂
+ 𝑋
+𝑤
+,
+ Ƹ
+𝑖
+𝑌
+𝑤
+,
+ Ƹ
+𝑗
+𝑂
+ 𝑋
+𝑤
+,
+ Ƹ
+𝑖
+𝑌
+𝑤
+,
+ Ƹ
+𝑗
+M
+𝑣𝑖𝑒𝑤
+ =
+ M
+𝑐𝑎𝑚
+−
+1
+M
+𝑀
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+M
+𝑁𝐷𝐶
+with
+camera
+
+--- PAGE 31 ---
+World
+-
+to
+-
+NDC 
+Transform: Example (1/3)
+•
+ Given
+ following
+ camera
+ settings,
+ compute
+ world
+-
+to
+-
+NDC
+transformation
+ matrix
+•
+ Camera
+ position
+ in
+ world
+ system
+ 𝐶
+𝑤
+ =
+ (
+6
+,
+ 7
+)
+•
+ Camera
+ aimed
+ so
+ that
+ its
+ up
+ vector
+ is
+ ො
+𝑣
+ =
+ Τ
+4
+ 5
+ ,
+ Τ
+3
+ 5
+•
+ Camera
+ window
+ has
+ width
+ 𝑊
+ =
+ 10
+ and
+ height
+ 𝐻
+ =
+ 12
+•
+ First
+ step
+ is
+ to
+ completely
+ specify
+ camera’s
+ orientation
+•
+ Compute
+ side
+ vector
+ ො
+𝑢
+ by
+ rotating
+ up
+ vector
+ ො
+𝑣
+ thro
+ −
+90
+°
+about
+ 𝑧
+ axis
+•
+ ො
+𝑢
+ =
+ R
+𝜃
+°
+ ො
+𝑣
+ ⟹
+𝑢
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ =
+ 0
+ 1
+−
+1
+ 0
+𝑣
+ Ƹ
+𝑖
+𝑣
+ Ƹ
+𝑗
+ ⟹
+𝑢
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ =
+ 𝑣
+ Ƹ
+𝑗
+−
+𝑣
+ Ƹ
+𝑖
+•6/2/2024 •31
+
+--- PAGE 32 ---
+World
+-
+to
+-
+NDC 
+Transform: Example (2/3)
+•
+ Next,
+ compute
+ camera
+-
+to
+-
+world
+ transformation
+M
+𝑐𝑎𝑚
+ =
+ ො
+𝑢
+ ො
+𝑣
+ 𝐶
+𝑤
+ =
+Τ
+3
+ 5
+ Τ
+4
+ 5
+ 6
+Τ
+−
+4
+ 5
+ Τ
+3
+ 5
+ 7
+0
+ 0
+ 1
+=
+1
+ 0
+ 6
+0
+ 1
+ 7
+0
+ 0
+ 1
+Τ
+3
+ 5
+ Τ
+4
+ 5
+ 0
+Τ
+−
+4
+ 5
+ Τ
+3
+ 5
+ 0
+0
+ 0
+ 1
+•
+ Using
+ camera
+-
+to
+-
+world
+ transformation,
+ compute
+ world
+-
+to
+-
+camera
+ transformation
+:
+M
+𝑣𝑖𝑒𝑤
+ =
+ M
+𝑐𝑎𝑚
+−
+1
+ =
+Τ
+3
+ 5
+ −
+ Τ
+4
+ 5
+ 0
+Τ
+4
+ 5
+ Τ
+3
+ 5
+ 0
+0
+ 0
+ 1
+1
+ 0
+ −
+6
+0
+ 1
+ −
+7
+0
+ 0
+ 1
+=
+Τ
+3
+ 5
+ Τ
+−
+4
+ 5
+ 2
+Τ
+4
+ 5
+ Τ
+3
+ 5
+ −
+9
+0
+ 0
+ 1
+•6/2/2024 •32
+
+--- PAGE 33 ---
+World
+-
+to
+-
+NDC 
+Transform: Example (3/3)
+•
+ Compute
+ camera
+-
+to
+-
+NDC
+ transformation
+M
+𝑁𝐷𝐶
+ =
+ H
+ 2
+10
+,
+ 2
+12
+=
+Τ
+1
+ 5
+ 0
+ 0
+0
+ Τ
+1
+ 6
+ 0
+0
+ 0
+ 1
+•
+ Finally,
+ we’re
+ ready
+ to
+ compute
+ world
+-
+to
+-
+NDC
+ transformation
+:
+M
+𝑁𝐷𝐶
+ ∘
+ 𝑀
+𝑣𝑖𝑒𝑤
+ =
+Τ
+1
+ 5
+ 0
+ 0
+0
+ Τ
+1
+ 6
+ 0
+0
+ 0
+ 1
+Τ
+3
+ 5
+ −
+ Τ
+4
+ 5
+ 2
+Τ
+4
+ 5
+ Τ
+3
+ 5
+ −
+9
+0
+ 0
+ 1
+=
+Τ
+3
+ 2
+5
+ Τ
+−
+4
+ 2
+5
+ Τ
+2
+ 5
+Τ
+2
+ 1
+5
+ Τ
+1
+ 10
+ −
+ Τ
+3
+ 2
+0
+ 0
+ 1
+•6/2/2024 •33
+
+--- PAGE 34 ---
+Viewing an Object: Model
+-
+to
+-
+NDC 
+Transform (1/3)
+•
+ Compute
+ model
+-
+to
+-
+NDC
+ transform
+:
+ M
+𝑁𝐷𝐶
+ ∘
+ M
+𝑣𝑖𝑒𝑤
+ ∘
+ M
+𝑀
+where
+ M
+𝑀
+ is
+ model
+-
+to
+-
+world
+ (model)
+ transformation
+•6/2/2024 •34
+
+--- PAGE 35 ---
+Viewing an Object: Model
+-
+to
+-
+NDC 
+Transform 
+(2/3
+)
+•6/2/2024 •35
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+𝑂
+ 𝑋
+𝑚
+𝑌
+𝑚
+𝑂
+ 𝑋
+𝑤
+,
+ Ƹ
+𝑖
+𝑌
+𝑤
+,
+ Ƹ
+𝑗
+𝑂
+ 𝑋
+𝑤
+,
+ Ƹ
+𝑖
+𝑌
+𝑤
+,
+ Ƹ
+𝑗
+M
+𝑣𝑖𝑒𝑤
+ =
+ M
+𝑐𝑎𝑚
+−
+1
+M
+𝑀
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+M
+𝑁𝐷𝐶
+with
+camera
+
+--- PAGE 36 ---
+Viewing an Object: Model
+-
+to
+-
+NDC 
+Transform 
+(3/3)
+•
+ Compute
+ model
+-
+to
+-
+NDC
+ transform
+:
+ M
+𝑁𝐷𝐶
+ ∘
+ M
+𝑣𝑖𝑒𝑤
+ ∘
+ M
+𝑀
+where
+ M
+𝑀
+ is
+ model
+-
+to
+-
+world
+ (model)
+ transformation
+•
+ This
+ matrix
+ sent
+ to
+ vertex
+ shader
+•
+ Vertex
+ shader
+ will
+ map
+ vertices
+ in
+ model
+ system
+ directly
+ to
+NDC
+ system
+•
+ Subsequent
+ stages
+ will
+ rasterizer
+ and
+ render
+ the
+ object
+using
+ transformed
+ vertices
+•6/2/2024 •36
+
+--- PAGE 37 ---
+Displaying Scene
+•6/2/2024 •37
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+𝑂
+ 𝑋
+𝑚
+𝑌
+𝑚
+𝑂
+ 𝑋
+𝑤
+,
+ Ƹ
+𝑖
+𝑌
+𝑤
+,
+ Ƹ
+𝑗
+𝑂
+ 𝑋
+𝑤
+,
+ Ƹ
+𝑖
+𝑌
+𝑤
+,
+ Ƹ
+𝑗
+M
+𝑣𝑖𝑒𝑤
+M
+𝑀
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+M
+𝑁𝐷𝐶
+with
+camera
+M
+𝑣𝑖𝑒𝑤𝑝𝑜𝑟𝑡
+𝑥
+𝑏𝑙
+𝑑
+ ,
+ 𝑦
+𝑏𝑙
+𝑑
+𝑊
+𝑣𝑝
+𝐻
+𝑣𝑝
+𝑋
+𝑑
+𝑌
+𝑑
+Computer Display
+Viewport
+
+--- PAGE 38 ---
+WYSIWYG Images (1/2)
+•
+ To
+ obtain
+ WYSIWYG
+ images,
+ camera’s
+ “window
+ to
+world”
+ should’ve
+ same
+ aspect
+ ratio
+ as
+ viewport
+•
+ If
+ camera’s
+ window
+ width
+ and
+ height
+ are
+ 𝑊
+ and
+ 𝐻
+,
+aspect
+ ratio
+ [of
+ camera’s
+ window]
+ is
+:
+ 𝛼
+ =
+𝑊
+𝐻
+•6/2/2024 •38
+𝑋
+𝑛
+𝑌
+𝑛
+𝑂
+0
+,
+ 0
+−
+1
+,
+ −
+1
+1
+,
+ 1
+Ƹ
+𝑖
+ =
+ ො
+𝑢
+𝑂
+ =
+ 𝐶
+𝑣
+Ƹ
+𝑗
+ =
+ ො
+𝑣
+𝑊
+𝐻
+M
+𝑁𝐷𝐶
+M
+𝑣𝑖𝑒𝑤𝑝𝑜𝑟𝑡
+𝑥
+𝑏𝑙
+𝑑
+ ,
+ 𝑦
+𝑏𝑙
+𝑑
+𝑊
+𝑣𝑝
+𝐻
+𝑣𝑝
+𝑋
+𝑑
+𝑌
+𝑑
+Computer Display
+Viewport
+
+--- PAGE 39 ---
+WYSIWYG Images (2/2)
+•
+ In
+ general,
+ we
+ first
+ specify
+ viewport’s
+ dimensions
+ from
+which
+ we
+ compute
+ aspect
+ ratio
+ 𝛼
+𝑣𝑝
+ =
+𝑊
+𝑣𝑝
+𝐻
+𝑣𝑝
+•
+ We
+ interactively
+ control
+ camera
+ window
+ dimensions
+ by
+setting
+ just
+ its
+ width
+ 𝑊
+ [or
+ just
+ its
+ height
+ 𝐻
+]
+•
+ Then
+ camera
+ window
+ height
+ is
+ 𝐻
+ =
+ 𝑊
+𝛼
+𝑣𝑝
+[or
+ camera
+window
+ width
+ is
+ 𝑊
+ =
+ 𝐻
+𝛼
+𝑣𝑝
+]
+•6/2/2024 •39

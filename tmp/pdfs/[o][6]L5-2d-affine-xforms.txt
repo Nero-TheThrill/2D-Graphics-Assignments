@@ -1,0 +1,1625 @@
+
+--- PAGE 1 ---
+Introduction to Computer Graphics
+2D Affine Geometry
+Prasanna
+ Ghali
+Parminder Singh
+
+--- PAGE 2 ---
+Submission
+: Folder 
+Layout
+•
+ Command
+ line
+ verification
+•
+ powershell
+ -
+Command
+ "Expand
+-
+Archive
+ -
+LiteralPath
+ foo
+-
+tutorial
+-
+0
+.
+zip
+ -
+DestinationPath
+ .
+“
+• After running this command, the directory must follow the layout shown in the image:
+•5/21/2024 •2
+
+
+--- PAGE 3 ---
+Agenda
+•
+ Intro
+ Slide
+:
+ 2
+D
+ Affine
+ Geometry
+•
+ Transformations
+:
+ Linear
+ /
+ Affine
+•
+ Homogenous
+ Coordinates
+•
+ Coordinate
+ System
+•
+ Transformation
+ operations
+:
+ Rotate,
+ Translate
+ etc
+.
+•5/21/2024 •3
+
+--- PAGE 4 ---
+Affine Geometry
+•
+ Branch
+ of
+ mathematics
+ that
+ studies
+ the
+ properties
+ of
+shapes
+.
+•
+ It
+ ensure
+ the
+ shape
+ that
+ remain
+ unchanged
+ under
+ affine
+transformations
+.
+•
+ Preserves
+ straight
+ lines
+ and
+ ratios
+ of
+ distances
+ between
+points
+•5/21/2024 •4
+
+--- PAGE 5 ---
+Affine Geometry
+•
+ In
+ affine
+ geometry,
+ the
+ focus
+ is
+ on
+ the
+ properties
+ of
+ shapes
+ and
+ figures
+ that
+are
+ invariant
+ under
+ affine
+ transformations,
+ such
+ as
+:
+•
+ Parallelism
+•
+ Concavity
+•
+ Convexity
+•
+ Similarity
+•5/21/2024 •5
+
+
+--- PAGE 6 ---
+Affine Geometry: Applications
+•
+ Computer
+ graphics
+•
+ Image
+ processing
+•
+ Computer
+ vision
+•
+ Robotics
+•5/21/2024 •6
+•Ego Vehicle
+•Perception: Sensing and understanding the environment.
+•Planning: Making decisions on navigation and interactions.
+•Control: Executing the planned actions to guide the vehicle.
+
+--- PAGE 7 ---
+Coordinate System or Reference System
+•
+ A
+ mathematical
+ framework
+ that
+ used
+ numbers
+ to
+uniquely
+ determine
+ the
+ position
+ of
+ points
+ in
+ a
+ given
+space
+.
+•
+ These
+ number
+ are
+ called
+ coordinates
+.
+•
+ Most
+ common
+ coordinates
+ systems
+•
+ Cartesian
+ Coordinate
+ System
+•
+ Coordinates
+:
+ (x,
+ y)
+•
+ Polar
+ Coordinates
+ System
+•
+ Coordinates
+:
+ (r,
+ 𝜃
+)
+•
+ Homogeneous
+ Coordinates
+•5/21/2024, Src: Clevertap •7
+
+
+--- PAGE 8 ---
+2D Coordinate System
+•5/21/2024 •8
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑥
+𝑦
+Ƹ
+𝑖
+ =
+ (
+1
+,
+ 0
+)
+𝑂
+ =
+ (
+0
+,
+ 0
+)
+Ƹ
+𝑗
+ =
+ (
+0
+,
+ 1
+)
+Ƹ
+𝑖
+ =
+ Ƹ
+𝑗
+ =
+ 1
+Ƹ
+𝑖
+ ∙
+ Ƹ
+𝑗
+ =
+ 0
+
+--- PAGE 9 ---
+Linear Transformation
+•
+ Maps
+ vectors
+ from
+ one
+ vector
+ space
+ to
+ another
+•
+ Preserves
+ vector
+ addition
+ and
+ scalar
+ multiplication
+ operations
+•
+ A
+ transformation
+ T
+:
+V→W
+ between
+ two
+ vector
+ spaces
+ V
+ and
+ W
+ is
+linear
+ if
+ for
+ any
+ vectors
+ u,v
+∈
+V
+ and
+ any
+ scalar
+ c
+∈
+R
+•
+ Additivity
+ (or
+ Superposition)
+:
+•
+ T(
+u+v
+)=T(u)+T(v)
+•
+ Homogeneity
+ (or
+ Scalar
+ Multiplication)
+:
+•
+ T(cu)=
+cT
+(u)
+•5/21/2024 •9
+
+--- PAGE 10 ---
+Linear Coordinate Representation for 
+2D Points, Vectors, and Matrices
+•
+ Points
+• A 2D point is represented as a 2-tuple
+• (x, y)
+•
+ Vectors
+• A 2D vector is represented as a 2-tuple:
+• (x, y)
+•
+ Matrix
+• A 2D transformation matrix is a 2x2 matrix:
+•5/21/2024
+•𝐴 = 𝑎 𝑏
+𝑐 𝑑
+
+--- PAGE 11 ---
+Linear Coordinate Operations
+•5/21/2024
+Operations
+•Point addition: 
+•(x1, y1) + (x2, y2) = (x1 + x2, y1 + y2)
+•Vector addition: 
+•(x1, y1) + (x2, y2) = (x1 + x2, y1 + y2)
+•Matrix multiplication: 
+
+
+--- PAGE 12 ---
+Homogeneous Coordinate Representation 
+for 2D Points, Vectors, and Matrices 
+(3/4)
+•
+ Points
+• A 2D point is represented as a 3-tuple
+• (x, y, 1)
+•
+ Vectors
+• A 2D vector is represented as a 3-tuple:
+• (x, y, 0)
+•
+ Matrix
+• A 2D transformation matrix is a 3x3 matrix:
+•5/21/2024 •12
+A =
+𝑎 𝑏 0
+𝑐 𝑑 0
+0 0 1
+Block matrix
+•A =
+L11 L12 𝑡1
+L21 L22 𝑡2
+0 0 1W
+W
+W
+
+--- PAGE 13 ---
+Homogeneous Coordinates Intro
+•
+ Homogenous
+ =
+ Homo
+ +
+ Geneous
+ (Greek
+ words)
+•
+ Homo
+:
+ Same
+ or
+ Common
+•
+ Genous
+:
+ Kind
+ or
+ Type
+•
+ Concept
+ of
+ scale
+ factor
+ W
+•
+ (
+1
+,
+ 1
+),
+ (
+2
+,
+ 2
+),
+ (
+3
+,
+ 3
+)
+ Homogenous
+?
+•
+ W
+ ?
+•5/21/2024 •13
+
+--- PAGE 14 ---
+Homogeneous Coordinates Intro
+•
+ (
+1
+,
+ 2
+),
+ (
+2
+,
+ 4
+),
+ (
+3
+,
+ 6
+)
+ Homogenous?
+•
+ W
+ ?
+•5/21/2024 •14
+
+
+--- PAGE 15 ---
+Homogeneous Coordinates Pictorial 
+Representation
+•5/21/2024 •15
+
+
+--- PAGE 16 ---
+Homogeneous Coordinates (1/4)
+•
+ Points
+•
+ Standard
+ representation
+ 𝑃
+ =
+ 𝑃
+1
+,
+ 𝑃
+2
+ =
+ 𝑃
+𝑥
+,
+ 𝑃
+𝑦
+ =
+ 𝑃
+ Ƹ
+𝑖
+,
+ 𝑃
+ Ƹ
+𝑗
+•
+ Column
+ vector
+ representation
+𝑃
+ =
+ 𝑃
+1
+𝑃
+2
+=
+ 𝑃
+𝑥
+𝑃
+𝑦
+=
+ 𝑃
+ Ƹ
+𝑖
+𝑃
+ Ƹ
+𝑗
+•
+ Homogeneous
+ coordinate
+ representation
+𝑃
+ =
+𝑃
+1
+𝑃
+2
+1
+=
+𝑃
+𝑥
+𝑃
+𝑦
+1
+=
+𝑃
+ Ƹ
+𝑖
+𝑃
+ Ƹ
+𝑗
+1
+•5/21/2024 •16
+
+--- PAGE 17 ---
+Homogeneous Coordinates (2/4)
+•
+ Vectors
+•
+ Standard
+ representation
+ Ԧ
+𝑣
+ =
+ 𝑣
+1
+,
+ 𝑣
+2
+ =
+ 𝑣
+𝑥
+,
+ 𝑣
+𝑦
+ =
+ 𝑣
+ Ƹ
+𝑖
+,
+ 𝑣
+ Ƹ
+𝑗
+•
+ Column
+ vector
+ representation
+Ԧ
+𝑣
+ =
+ 𝑣
+1
+𝑣
+2
+=
+𝑣
+𝑥
+𝑣
+𝑦
+ =
+𝑣
+ Ƹ
+𝑖
+𝑣
+ Ƹ
+𝑗
+•
+ Homogeneous
+ coordinate
+ representation
+𝑃
+ =
+𝑣
+1
+𝑣
+2
+0
+=
+𝑣
+𝑥
+𝑣
+𝑦
+0
+=
+𝑣
+ Ƹ
+𝑖
+𝑣
+ Ƹ
+𝑗
+0
+•5/21/2024 •17
+
+--- PAGE 18 ---
+Homogeneous Coordinates (3/4)
+•
+ Combining
+ points
+ and
+ vectors
+•
+ We
+ may
+ add,
+ subtract,
+ and
+ multiply
+ by
+ scalars
+•
+ Result
+ is
+ geometrically
+ meaningful
+ only
+ when
+•
+ The
+ 𝑤
+-
+ component
+ is
+ 1
+ (a
+ point)
+•
+ The
+ 𝑤
+-
+component
+ is
+ 0
+ (a
+ vector)
+•
+ Example
+𝑃
+ =
+ 2
+,
+ 1
+ ,
+ 𝑄
+ =
+ −
+4
+,
+ 5
+ ,
+ Ԧ
+𝑣
+ =
+ 3
+,
+ 7
+3
+𝑃
+ −
+ 2
+𝑄
+ −
+ Ԧ
+𝑣
+ =
+ 3
+2
+1
+1
+−
+ 2
+−
+4
+5
+1
+−
+3
+7
+0
+=
+1
+1
+−
+14
+1
+•5/21/2024 •18
+
+--- PAGE 19 ---
+Homogeneous Coordinate Representation 
+for 2D Points, Vectors, and Matrices 
+(3/4)
+•
+ Points
+• A 2D point is represented as a 3-tuple
+• (x, y, 1)
+•
+ Vectors
+• A 2D vector is represented as a 3-tuple:
+• (x, y, 0)
+•
+ Matrix
+• A 2D transformation matrix is a 3x3 matrix:
+•5/21/2024 •19
+A =
+𝑎 𝑏 0
+𝑐 𝑑 0
+0 0 1
+Block matrix
+•A =
+L11 L12 𝑡1
+L21 L22 𝑡2
+0 0 1W
+W
+W
+
+--- PAGE 20 ---
+Affine Transformations (1/2)
+•
+ Compositional
+ notation
+:
+ A
+ =
+ T
+Ԧ
+𝑡
+ ∘
+ L
+•
+ L
+ is
+ linear
+ part
+•
+ Ԧ
+𝑡
+ is
+ translation
+ part
+•
+ Standard
+ representation
+A
+ 𝑃
+ =
+ L
+ 𝑃
+ +
+ Ԧ
+𝑡
+L
+ =
+ L
+11
+ L
+1
+2
+L
+2
+1
+ L
+22
+,
+ Ԧ
+𝑡
+ =
+ 𝑡
+1
+𝑡
+2
+•5/21/2024 •20
+
+--- PAGE 21 ---
+Affine Transformations (2/2)
+•
+ Homogeneous
+ coordinate
+ representation
+:
+ A
+ =
+L
+11
+ L
+12
+ 𝑡
+1
+L
+21
+ L
+22
+ 𝑡
+2
+0
+ 0
+ 1
+•5/21/2024 •21
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+ +
+ Ԧ
+𝑡
+L
+ Ƹ
+𝑖
+ =
+ 𝑢
+L
+ Ƹ
+𝑗
+ =
+ Ԧ
+𝑣
+A
+ =
+ L
+ Ƹ
+𝑖
+ L
+ Ƹ
+𝑗
+ 𝑂
+ +
+ Ԧ
+𝑡
+ =
+ 𝑢
+ Ԧ
+𝑣
+ 𝐶
+A
+ =
+𝑢
+ Ƹ
+𝑖
+ 𝑣
+ Ƹ
+𝑖
+ 𝐶
+ Ƹ
+𝑖
+𝑢
+ Ƹ
+𝑗
+ 𝑣
+ Ƹ
+𝑗
+ 𝐶
+ Ƹ
+𝑗
+0
+ 0
+ 1
+
+--- PAGE 22 ---
+Basic Transformations
+•
+ Scaling
+•
+ Rotation
+•
+ Translation
+•5/21/2024 •22
+
+--- PAGE 23 ---
+Scaling Transformations (1/2)
+•
+ Uniform
+ H
+𝛼
+ =
+𝛼
+ 0
+ 0
+0
+ 𝛼
+ 0
+0
+ 0
+ 1
+•5/21/2024 •23
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+ 𝛼
+ Ƹ
+𝑖
+𝛼
+ Ƹ
+𝑗
+H
+𝛼
+
+--- PAGE 24 ---
+Scaling Transformations (2/2)
+•
+ Non
+-
+uniform
+ H
+ 𝛼
+,
+𝛽
+ =
+𝛼
+ 0
+ 0
+0
+ 𝛽
+ 0
+0
+ 0
+ 1
+•5/21/2024 •24
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+𝛼
+ Ƹ
+𝑖
+𝛽
+ Ƹ
+𝑗
+H
+ 𝛼
+,
+𝛽
+
+--- PAGE 25 ---
+Rotation Transformations
+•
+ Counterclockwise
+ rotation
+ about
+ 𝑧
+ axis
+ by
+ angle
+ 𝜃
+°
+R
+𝜃
+°
+ =
+c
+os
+ 𝜃
+°
+ −
+ sin
+ 𝜃
+°
+ 0
+sin
+ 𝜃
+°
+ cos
+ 𝜃
+°
+ 0
+0
+ 0
+ 1
+•5/21/2024 •25
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+R
+𝜃
+°
+
+--- PAGE 26 ---
+Translation Transformations
+•
+ Move
+ or
+ displace
+T
+Ԧ
+𝑡
+ =
+1
+ 0
+ 𝑡
+𝑖
+0
+ 1
+ 𝑡
+𝑗
+0
+ 0
+ 1
+•5/21/2024 •26
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+Ƹ
+𝑖
+Ƹ
+𝑗
+Ԧ
+𝑡
+ 𝑂
+ +
+ Ԧ
+𝑡
+T
+Ԧ
+𝑡
+
+--- PAGE 27 ---
+Reflection Transformations
+•
+ Mirroring
+•
+ Not
+ a
+ rotation
+ by
+ 180
+°
+ about
+ 𝑧
+ axis!!!
+S
+𝑥
+ =
+−
+1
+ 0
+ 0
+0
+ 1
+ 0
+0
+ 0
+ 1
+S
+𝑦
+ =
+1
+ 0
+ 0
+0
+ −
+1
+ 0
+0
+ 0
+ 1
+•5/21/2024 •27
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+Ƹ
+𝑖
+−
+ Ƹ
+𝑗
+S
+𝑦
+𝑂
+
+--- PAGE 28 ---
+Shear Transformations
+•
+ Rectangle
+ to
+ parallelogram,
+•
+ For
+ example,
+ standard
+ fonts
+ become
+ italic
+J
+ Ƹ
+𝑖
+,
+𝛼
+ =
+1
+ 𝛼
+ 0
+0
+ 1
+ 0
+0
+ 0
+ 1
+J
+ Ƹ
+𝑗
+,
+𝛽
+ =
+1
+ 0
+ 0
+𝛽
+ 1
+ 0
+0
+ 0
+ 1
+•5/21/2024 •28
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+𝑂
+J
+ Ƹ
+𝑖
+,
+1
+
+--- PAGE 29 ---
+Composing Transformations
+•5/21/2024 •29
+•
+ Transform
+ A
+ followed
+ by
+ transform
+ B
+ followed
+ by
+ C
+ is
+•
+ C
+ ∘
+ B
+ ∘
+ A
+•
+ Order
+ of
+ composition
+ is
+ right
+ to
+ left!!!
+•
+ Applied
+ to
+ a
+ point
+ 𝑃
+:
+ C
+ ∘
+ B
+ ∘
+ A
+ 𝑃
+ =
+ C
+ B
+ A
+ 𝑃
+
+--- PAGE 30 ---
+Composing Transformations: Example
+•5/21/2024 •30
+•
+ Translation
+ by
+ 𝑚
+ =
+ 3
+,
+ 1
+ ,
+ followed
+ by
+•
+ Uniform
+ scaling
+ by
+ 4
+,
+ followed
+ by
+•
+ Translation
+ by
+ 𝑛
+ =
+ −
+2
+,
+ 5
+T
+𝑛
+ ∘
+ H
+4
+ ∘
+ T
+𝑚
+ =
+ T
+𝑛
+ ∘
+ H
+4
+ ∘
+ T
+𝑚
+ =
+ T
+𝑛
+ ∘
+ H
+4
+ ∘
+ T
+𝑚
+=
+4
+ 0
+ −
+2
+0
+ 4
+ 5
+0
+ 0
+ 1
+1
+ 0
+ 3
+0
+ 1
+ 1
+0
+ 0
+ 1
+=
+4
+ 0
+ 10
+0
+ 4
+ 9
+0
+ 0
+ 1
+
+--- PAGE 31 ---
+Mapping Axis
+-
+Aligned Rectangles (1/2)
+•5/21/2024 •31
+•
+ Input
+:
+ axis
+-
+aligned
+ rectangles
+ 𝑅
+1
+ and
+ 𝑅
+2
+•
+ Wanted
+:
+ transformation
+ matrix
+ that
+ maps
+ 𝑅
+1
+ to
+ 𝑅
+2
+𝑂
+ Ƹ
+𝑖
+Ƹ
+𝑗
+M
+ ?
+ ?
+ ?
+𝐶
+1
+ℎ
+1
+𝑤
+1
+𝑅
+1
+ 𝐶
+2
+ℎ
+2
+𝑤
+2
+𝑅
+2
+
+--- PAGE 32 ---
+Mapping Axis
+-
+Aligned Rectangles (2/2)
+•5/21/2024 •32
+•
+ Strategy
+•
+ Translate
+ so
+ that
+ 𝑅
+1
+’s
+ center
+ is
+ origin
+•
+ Scale
+ so
+ that
+ 𝑅
+1
+’s
+ geometry
+ matches
+ 𝑅
+2
+•
+ Translate
+ origin
+ to
+ 𝑅
+2
+’s
+ center
+
+--- PAGE 33 ---
+Axis
+-
+Aligned Rectangles: Example
+•5/21/2024 •33
+•
+ 𝑅
+1
+:
+ width
+ 2
+,
+ height
+ 3
+,
+ center
+ 9
+,
+ −
+5
+•
+ 𝑅
+2
+:
+ width
+ 6
+,
+ height
+ 6
+,
+ center
+ 4
+,
+ 7
+T
+ 4
+,
+7
+ ∘
+ H
+ Τ
+6
+ 2
+,
+ Τ
+6
+ 3
+ ∘
+ T
+ −
+9
+,
+5
+ =
+ T
+ 4
+,
+7
+ ∘
+ H
+ 3
+,
+2
+ ∘
+ T
+ −
+9
+,
+5
+=
+3
+ 0
+ 4
+0
+ 2
+ 7
+0
+ 0
+ 1
+1
+ 0
+ −
+9
+0
+ 1
+ 5
+0
+ 0
+ 1
+=
+3
+ 0
+ −
+23
+0
+ 2
+ 17
+0
+ 0
+ 1
+
+--- PAGE 34 ---
+Action 
+W
+ith 
+R
+espect to a Point
+•5/21/2024 •34
+•
+ Linear
+ transformation
+ L
+ acts
+ with
+ respect
+ to
+ origin
+•
+ Rotation
+ will
+ rotate
+ a
+ thing
+ about
+ origin
+•
+ Corresponding
+ affine
+ transformation
+ that
+ has
+ L
+ acting
+with
+ respect
+ to
+ point
+ 𝑃
+ is
+ T
+𝑃
+ ∘
+ L
+ ∘
+ T
+−
+𝑃
+
+--- PAGE 35 ---
+Action 
+W
+ith 
+R
+espect to a Point: Example
+•5/21/2024 •35
+•
+ Find
+ action
+ of
+ L
+ =
+ −
+2
+ 1
+3
+ 0
+ wrt
+ point
+ 4
+,
+5
+T
+𝑃
+ ∘
+ L
+ ∘
+ T
+−
+𝑃
+ =
+ T
+𝑃
+ ∘
+ L
+ ∘
+ T
+−
+𝑃
+=
+−
+2
+ 1
+ 4
+3
+ 0
+ 5
+0
+ 0
+ 1
+1
+ 0
+ −
+4
+0
+ 1
+ −
+5
+0
+ 0
+ 1
+=
+−
+2
+ 1
+ 7
+3
+ 0
+ −
+7
+0
+ 0
+ 1
