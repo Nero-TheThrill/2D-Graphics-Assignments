@@ -8,7 +8,7 @@ int main(int argc,char** argv) {
     try {
         Object object{nullptr,{4,5},pi/2,{2,3}};
         pointNear(modelMatrix(object).point({1,0}),{4,7});
-        pointNear(modelMatrix(object,true).point({1,0}),{-5,6});
+        pointNear(modelMatrix(object,true).point({1,0}),{-10,15});
         Camera camera{{2,-3},.7f,6};
         pointNear(viewMatrix(camera).point(camera.position),{0,0});
         pointNear(cameraToNdc(camera,2).point({6,3}),{1,1});

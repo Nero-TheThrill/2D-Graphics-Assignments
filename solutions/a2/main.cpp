@@ -17,7 +17,7 @@ int main(int argc, char** argv)
         auto objects = makeObjects(house);
 
         size_t selected = 0;
-        bool rts = false;
+        bool useSRT = false;
 
         while (app.begin())
         {
@@ -31,16 +31,16 @@ int main(int argc, char** argv)
             }
 
             if (app.pressed(GLFW_KEY_O))
-                rts = !rts;
+                useSRT = !useSRT;
 
             if (!objects.empty())
                 updateObject(objects[selected], app);
 
             for (const auto& o : objects)
-                drawObject(o, program.id, rts);
+                drawObject(o, program.id, useSRT);
 
             if (app.pressed(GLFW_KEY_O))
-                std::printf("Matrix order: %s\n", rts ? "R*T*S" : "T*R*S");
+                std::printf("Matrix order: %s\n", useSRT ? "S*R*T" : "T*R*S");
 
             app.end();
         }

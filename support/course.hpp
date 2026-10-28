@@ -39,14 +39,27 @@ struct Mat3
     // Column-major storage. Column vectors. A * B applies B first.
     std::array<float, 9> m{};
 
+    Mat3() = default;
+
+    // Initialize row by row, as on paper; keep OpenGL storage internal.
+    Mat3(
+        float a00, float a01, float a02,
+        float a10, float a11, float a12,
+        float a20, float a21, float a22)
+        : m{{
+            a00, a10, a20,
+            a01, a11, a21,
+            a02, a12, a22
+        }} {}
+
     [[nodiscard]]
     static Mat3 identity()
     {
-        return {{
+        return {
             1, 0, 0,
             0, 1, 0,
             0, 0, 1
-        }};
+        };
     }
 
     [[nodiscard]]

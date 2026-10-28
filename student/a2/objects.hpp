@@ -13,28 +13,28 @@ struct Object
 
 inline Mat3 translation(float x, float y)
 {
-    // TODO A2.1a: homogeneous 2D translation matrix, column-major storage.
-    // Hint: Check Mat3 storage: m[column * 3 + row]. Line breaks in the initializer do not define matrix rows.
+    // TODO A2.1a: homogeneous 2D translation matrix.
+    // Hint: Initialize Mat3 with nine entries in braces, written row by row as on paper.
     return Mat3::identity();
 }
 
 inline Mat3 rotation(float radians)
 {
     // TODO A2.1b: counterclockwise 2D rotation matrix.
-    // Hint: Use std::cos(radians) and std::sin(radians). Angles are in radians; store entries column by column.
+    // Hint: Use std::cos(radians), std::sin(radians), and a Mat3 initializer. Write entries row by row.
     return Mat3::identity();
 }
 
 inline Mat3 scaling(float x, float y)
 {
     // TODO A2.1c: independent x/y scaling matrix.
-    // Hint: Construct a Mat3 with x/y scale factors and the homogeneous coordinate entry. No OpenGL calls are needed here.
+    // Hint: Initialize Mat3 with x/y scale factors and the homogeneous coordinate entry. No OpenGL calls are needed here.
     return Mat3::identity();
 }
 
-inline Mat3 modelMatrix(const Object& o, bool rotateTranslation = false)
+inline Mat3 modelMatrix(const Object& o, bool useSRT = false)
 {
-    // TODO A2.2: TRS normally, RTS when rotateTranslation is true.
+    // TODO A2.2: TRS normally, SRT when useSRT is true.
     // Hint: Reuse translation, rotation, scaling, and Mat3::operator*. A * B applies B first.
     return Mat3::identity();
 }
@@ -55,7 +55,7 @@ inline void updateObject(Object& o, const App& app)
     // Only modify o; do not recreate the VBO or modify shared mesh vertices.
 }
 
-inline void drawObject(const Object& o, GLuint program, bool rotateTranslation = false)
+inline void drawObject(const Object& o, GLuint program, bool useSRT = false)
 {
     if (!o.mesh) return;
 

@@ -20,4 +20,4 @@ cmake --build build-solutions --config Debug --target verify_solutions
 build-solutions\Debug\verify_solutions.exe
 ```
 
-검사 범위는 TRS/RTS 수치 결과, 카메라 중심과 NDC 범위, 회전 카메라의 클릭 좌표 역변환, 아틀라스 UV, 이동·초기화 입력, 줌 제한, 네 가지 필터/wrap 설정 조합이다. 키보드의 모든 조합이나 실제 창 크기 변경을 자동 재현하는 검사는 아니므로 수업 전 조작은 정답 및 채점 안내의 확인 항목을 따라 점검한다.
+검사 범위는 TRS/SRT 수치 결과, 카메라 중심과 NDC 범위, 회전 카메라의 클릭 좌표 역변환, 아틀라스 UV, 이동·초기화 입력, 줌 제한, 네 가지 필터/wrap 설정 조합이다. 키보드의 모든 조합이나 실제 창 크기 변경을 자동 재현하는 검사는 아니므로 수업 전 조작은 정답 및 채점 안내의 확인 항목을 따라 점검한다.

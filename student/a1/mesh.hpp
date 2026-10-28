@@ -21,6 +21,12 @@ inline std::vector<Vertex> houseVertices()
 {
     // TODO A1.1: build wall, roof, door, and window vertices (x,y,r,g,b).
     // Hint: Build CPU positions and colors in std::vector<Vertex>; no OpenGL calls are needed here.
+    // In A1, (0, 0) maps to the screen center; x/y are normalized coordinates, not pixels.
+    // Build the whole house around local (0, 0), using the center of its outer bounds
+    // as the origin: (minX + maxX) / 2 = (minY + maxY) / 2 = 0.
+    // A2 rotates/scales about this local origin, then places it at Object::position in TRS mode.
+    // Center the whole house, not each roof/wall/door/window separately.
+    // The starter roof below is only a drawing check; it is not a centered complete house.
     return {{-.55f,.25f,1,.3f,.3f},{.55f,.25f,1,.3f,.3f},{0,.7f,1,.3f,.3f}};
 }
 inline std::vector<unsigned> houseIndices()
