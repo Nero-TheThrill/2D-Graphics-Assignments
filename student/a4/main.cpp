@@ -29,6 +29,7 @@ int main(int argc, char** argv)
         std::vector<Sprite> sprites;
 
         // TODO A4.8: create two static sprites sharing quad and atlas.
+        // Hint: Add Sprite entries with sprites.push_back or vector initialization. Use &quad for the Object mesh and &atlas for the texture.
         // Use different tile numbers (0..7) and positions visible to the initial camera.
 
         Sprite wrapDemo{{&quad, {0, -1.5f}, 0, {2, 1}}, &checker, 0};
@@ -42,6 +43,7 @@ int main(int argc, char** argv)
             uploadCamera(program.id, camera, app.width, app.height);
 
             // TODO A4.9: F toggles filtering for both textures; V toggles checker wrapping.
+            // Hint: Use app.pressed(GLFW_KEY_F) / app.pressed(GLFW_KEY_V) to toggle the bool values, then call textureSettings.
             // Apply the new settings with textureSettings; keep atlas wrapping clamped.
             // Use pressed for toggles; down would toggle every frame.
             // Provided: restore color-only mode before drawing the houses.

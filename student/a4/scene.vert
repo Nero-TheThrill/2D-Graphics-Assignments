@@ -18,5 +18,6 @@ void main()
     vColor = aColor;
 
     // TODO A4.7a: map quad UV to the selected atlas region.
+    // Hint: Apply uUvScale and uUvOffset to aUv with GLSL vec2 component-wise multiplication and addition.
     vUv = aUv;
 }

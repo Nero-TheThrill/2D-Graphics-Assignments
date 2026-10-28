@@ -20,6 +20,7 @@ int main(int argc, char** argv)
         while (app.begin())
         {
             // TODO A3.7: update viewport with framebuffer dimensions and update camera state.
+            // Hint: Call glViewport(x, y, width, height) and updateCamera(camera, app).
             // app.width / app.height are refreshed every frame, including after resize.
 
             glUseProgram(program.id);

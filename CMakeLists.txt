@@ -14,10 +14,23 @@ message(STATUS "Cumulative source track: ${TRACK}")
 foreach(n RANGE 1 4)
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${n}/main.cpp")
     add_executable(a${n} ${TRACK}/a${n}/main.cpp support/image.cpp)
+    # List editable files explicitly so generated IDE projects show them too.
+    file(GLOB assignment_shaders CONFIGURE_DEPENDS
+      "${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${n}/*.vert"
+      "${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${n}/*.frag")
+    set_source_files_properties(${assignment_shaders} PROPERTIES HEADER_FILE_ONLY TRUE)
+    target_sources(a${n} PRIVATE ${assignment_shaders} support/course.hpp)
+    source_group("Shaders" FILES ${assignment_shaders})
+    source_group("Support" FILES support/course.hpp support/image.cpp)
     target_include_directories(a${n} PRIVATE support)
     # Later assignments actually compile earlier work, rather than copying its answer.
     foreach(previous RANGE 1 ${n})
       target_include_directories(a${n} PRIVATE ${TRACK}/a${previous})
+      file(GLOB assignment_headers CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${previous}/*.hpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/${TRACK}/a${previous}/*.h")
+      target_sources(a${n} PRIVATE ${assignment_headers})
+      source_group("Assignments\\a${previous}" FILES ${assignment_headers})
     endforeach()
     target_compile_definitions(a${n} PRIVATE
       COURSE_TRACK="${TRACK}"

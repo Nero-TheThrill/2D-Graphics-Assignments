@@ -12,6 +12,7 @@ out vec3 vColor;
 void main()
 {
     // TODO A3.6: compose CameraToNdc * View * Model * localPosition.
+    // Hint: Use GLSL mat3 multiplication and vec3(aPosition, 1.0), then put the resulting xy into gl_Position.
     vec3 p = uModel * vec3(aPosition, 1.0); // A2 behavior until camera is implemented.
 
     gl_Position = vec4(p.xy, 0.0, 1.0);
